@@ -20,7 +20,7 @@ jobs:
 
     - name: 패키지 및 브라우저 설치
       run: |
-        pip install google-generativeai playwright
+        pip install google-generativeai playwright beautifulsoup4
         playwright install chromium --with-deps
 
     - name: 포스팅 실행
