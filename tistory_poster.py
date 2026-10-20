@@ -272,4 +272,235 @@ def generate_article_with_gemini(source_data):
         """
     else:
         source_prompt = """
-        시놀
+        시놀로지 NAS 실전 활용법(Docker 컨테이너, 백업 자동화, 역방향 프록시, 네트워크 설정 등) 또는 
+        실무 PC/개발 환경 세팅 중 초보자도 바로 따라 할 수 있는 주제를 하나 선정해 작성해주세요.
+        """
+
+    prompt = f"""
+    {source_prompt}
+
+    [필수 작성 양식 - ChooSu Note 스타일]:
+    1. 서론 인트로는 반드시 "내가 찾는 건 늘 없었다 (...)" 처럼 파편화된 정보 대신 처음부터 끝까지 하나로 통합해 정리한다는 담백한 독백으로 시작할 것.
+    2. 소제목과 섹션에 아래 이모지 구성을 그대로 사용할 것:
+       - 📘 [주제 핵심 개요]
+       - 📝 [사용 개요 및 권장 환경]
+       - 1️⃣ [주요 특징 및 개념]
+       - 2️⃣ [사전 준비물]
+       - 📅 [초기 설치 및 구축 방법 (①, ②, ③ 단계별 정리)]
+       - 💡 [세부 설정 및 실무 팁]
+       - 📂 [실사용 연결 방법 및 체크리스트]
+       - 🙌 [마무리 한 마디 (1. -> 2. -> 3. 핵심 3줄 요약)]
+    3. 절대 마크다운 별표(**)나 마크다운 헤더(##)를 본문에 쓰지 말 것!
+    4. 본문 중간에 실제 이미지가 들어갈 가장 적절한 위치 2곳에 각각 [IMAGE_1], [IMAGE_2] 표시를 단독 줄로 넣어줄 것.
+    5. [CODE_BLOCK] 항목에는 이 글의 가장 핵심이 되는 설정값 요약, CLI 명령어, 또는 단계별 체크리스트(10~15줄 분량)를 적어줄 것.
+    6. [OFFICIAL_URL] 항목에는 관련 공식 사이트나 오픈소스 GitHub URL 1개를 적어줄 것. 없으면 NONE.
+
+    [출력 포맷]:
+    [TAGS] 태그1, 태그2, 태그3, 태그4, 태그5, 태그6
+    [OFFICIAL_URL] https://...
+    [CODE_TITLE] System Setup / Configuration Summary
+    [CODE_BLOCK]
+    여기에 설정 코드나 핵심 구성 요약 작성
+    [/CODE_BLOCK]
+    [TITLE] 깔끔하고 직관적인 포스팅 제목
+    [CONTENT]
+    여기에 본문 작성 ([IMAGE_1], [IMAGE_2] 포함)
+    """
+
+    response = client.models.generate_content(
+        model='gemini-3.8-flash',
+        contents=prompt,
+    )
+    raw = response.text
+
+    tags = ["시놀로지", "NAS", "홈랩", "구축가이드", "IT팁"]
+    if "[TAGS]" in raw:
+        try:
+            t_str = raw.split("[TAGS]")[1].split("\n")[0].strip()
+            tags = [t.strip() for t in t_str.split(",") if t.strip()]
+        except Exception:
+            pass
+
+    official_url = None
+    if "[OFFICIAL_URL]" in raw:
+        try:
+            u_str = raw.split("[OFFICIAL_URL]")[1].split("\n")[0].strip()
+            if u_str.startswith("http"):
+                official_url = u_str
+        except Exception:
+            pass
+
+    code_title = "System Configuration / CLI"
+    if "[CODE_TITLE]" in raw:
+        try:
+            code_title = raw.split("[CODE_TITLE]")[1].split("\n")[0].strip()
+        except Exception:
+            pass
+
+    code_block = "# Configuration Setup\nversion: '3'\nservices:\n  app:\n    restart: unless-stopped"
+    if "[CODE_BLOCK]" in raw and "[/CODE_BLOCK]" in raw:
+        try:
+            code_block = raw.split("[CODE_BLOCK]")[1].split("[/CODE_BLOCK]")[0].strip()
+        except Exception:
+            pass
+
+    title = "실무 기준 통합 구축 가이드"
+    content = raw
+    if "[TITLE]" in raw and "[CONTENT]" in raw:
+        title = raw.split("[TITLE]")[1].split("[CONTENT]")[0].strip()
+        content = raw.split("[CONTENT]")[1].strip()
+
+    title = title.replace("**", "").strip()
+    content = content.replace("**", "").strip()
+
+    return {
+        "title": title,
+        "content": content,
+        "tags": tags,
+        "official_url": official_url,
+        "code_title": code_title,
+        "code_block": code_block
+    }
+
+
+# =====================================================================
+# 4. 티스토리 에디터에 이미지 실제 업로드 및 본문 발행
+# =====================================================================
+def upload_image_to_tistory(page, image_path):
+    try:
+        file_inputs = page.locator('input[type="file"]')
+        if file_inputs.count() > 0:
+            file_inputs.first.set_input_files(image_path)
+            page.wait_for_timeout(4000)
+            print(f"📸 이미지 업로드 성공: {os.path.basename(image_path)}")
+            return True
+    except Exception as e:
+        print(f"이미지 업로드 중 예외: {e}")
+    return False
+
+def post_to_tistory(p, article_data, image_paths):
+    print("티스토리 에디터 자동화 시작...")
+    raw_cookies = os.environ.get("TISTORY_COOKIE_JSON")
+    if not raw_cookies:
+        raise ValueError("TISTORY_COOKIE_JSON 환경변수가 없습니다.")
+
+    cookies = json.loads(raw_cookies)
+    formatted_cookies = []
+    for c in cookies:
+        cookie_dict = {
+            "name": c.get("name"),
+            "value": c.get("value"),
+            "domain": c.get("domain"),
+            "path": c.get("path", "/"),
+            "secure": c.get("secure", False),
+            "httpOnly": c.get("httpOnly", False),
+            "sameSite": c.get("sameSite") if c.get("sameSite") in ["Strict", "Lax", "None"] else "Lax"
+        }
+        formatted_cookies.append(cookie_dict)
+
+    browser = p.chromium.launch(headless=True)
+    context = browser.new_context(
+        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    )
+    context.add_cookies(formatted_cookies)
+    page = context.new_page()
+
+    page.on("dialog", lambda dialog: dialog.dismiss())
+
+    write_url = f"https://{BLOG_NAME}.tistory.com/manage/newpost/"
+    page.goto(write_url, wait_until="domcontentloaded")
+    page.wait_for_timeout(5000)
+
+    if "login" in page.url:
+        browser.close()
+        raise RuntimeError("티스토리 쿠키가 만료되어 로그인 페이지로 이동되었습니다.")
+
+    # 1. 제목 입력
+    title_locator = page.locator('textarea[placeholder="제목을 입력하세요"], #post-title-inp')
+    title_locator.wait_for(state="visible", timeout=15000)
+    title_locator.fill(article_data["title"])
+    print(f"제목 입력 완료: {article_data['title']}")
+
+    # 2. 본문 및 이미지 교차 업로드
+    page.click("#editor-root, body")
+    page.wait_for_timeout(1000)
+
+    content = article_data["content"]
+    segments = re.split(r'\[IMAGE_\d+\]', content)
+
+    for idx, segment in enumerate(segments):
+        clean_seg = segment.strip()
+        if clean_seg:
+            page.keyboard.insert_text(clean_seg + "\n\n")
+            page.wait_for_timeout(500)
+
+        if idx < len(image_paths):
+            upload_image_to_tistory(page, image_paths[idx])
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(500)
+
+    if len(image_paths) > len(segments):
+        for extra_img in image_paths[len(segments):]:
+            upload_image_to_tistory(page, extra_img)
+
+    print("본문 및 이미지 삽입 완료.")
+
+    # 3. 완료 레이어 열기
+    finish_btn = page.locator('#publish-layer-btn, button:has-text("완료")')
+    finish_btn.wait_for(state="visible", timeout=10000)
+    finish_btn.click()
+    page.wait_for_timeout(2000)
+
+    # 4. 태그 자동 입력
+    tag_input = page.locator('#tagText, input[placeholder*="태그"]')
+    if tag_input.count() > 0:
+        for tag in article_data["tags"]:
+            t_clean = tag.strip()
+            if t_clean:
+                tag_input.fill(t_clean)
+                tag_input.press("Enter")
+                page.wait_for_timeout(300)
+        print(f"태그 입력 완료: {article_data['tags']}")
+
+    # 5. 공개 라디오 버튼 JS 강제 체크 (타임아웃 방지) 및 최종 발행 클릭
+    page.evaluate("""() => {
+        const radio = document.querySelector('#open20') || document.querySelector('input[value="20"]') || document.querySelector('input[value="3"]');
+        if (radio) radio.click();
+    }""")
+    page.wait_for_timeout(500)
+
+    submit_btn = page.locator('#publish-btn, button:has-text("발행하기"), button:has-text("발행")').first
+    submit_btn.click(force=True)
+
+    page.wait_for_timeout(7000)
+    print(f"🎉 최종 발행 성공! 현재 URL: {page.url}")
+    browser.close()
+
+
+if __name__ == "__main__":
+    history = load_history()
+
+    # 1순위: dain2013 티스토리 탐색 -> 2순위: teon7070 네이버(시놀로지 기술 글) 탐색
+    source_data = fetch_from_dain_tistory(history)
+    if not source_data:
+        source_data = fetch_from_teon_naver(history)
+
+    article_data = generate_article_with_gemini(source_data)
+
+    with sync_playwright() as p:
+        final_images = source_data["images"] if (source_data and source_data.get("images")) else []
+
+        tech_captures = generate_real_tech_screenshots(
+            p,
+            code_snippet=article_data["code_block"],
+            command_title=article_data["code_title"],
+            doc_url=article_data["official_url"]
+        )
+
+        combined_images = (final_images + tech_captures)[:4]
+        print(f"총 첨부할 실화면 이미지 개수: {len(combined_images)}장")
+
+        post_to_tistory(p, article_data, combined_images)
+
+    if source_data:
+        save_history(source_data["id"])
