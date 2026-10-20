@@ -1,0 +1,30 @@
+name: Tistory Auto Post
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 한국 시간 오전 9시 (UTC 00:00) 자동 실행
+  workflow_dispatch:      # 사용자가 원할 때 수동으로 '지금 바로 실행' 버튼 활성화
+
+jobs:
+  run-poster:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 코드가져오기
+      uses: actions/checkout@v4
+
+    - name: 파이썬 설정
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: 패키지 및 브라우저 설치
+      run: |
+        pip install google-generativeai playwright
+        playwright install chromium --with-deps
+
+    - name: 포스팅 실행
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        TISTORY_COOKIE_JSON: ${{ secrets.TISTORY_COOKIE_JSON }}
+      run: python tistory_poster.py
