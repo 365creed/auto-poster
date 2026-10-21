@@ -32,7 +32,7 @@ jobs:
       - name: 포스팅 및 이미지 생성 스크립트 실행
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python tistory_poster.py
+        run: python poster.py
 
       - name: 변경된 파일 자동 커밋 및 푸시
         run: |
