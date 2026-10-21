@@ -2,11 +2,11 @@ name: Auto Tech Blog Publisher
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # UTC 00:00 = 한국 시간 오전 9:00
-    - cron: '0 6 * * *'   # UTC 06:00 = 한국 시간 오후 3:00
-    - cron: '0 12 * * *'  # UTC 12:00 = 한국 시간 밤 9:00
+    - cron: '0 0 * * *'   # 한국 시간 오전 9시
+    - cron: '0 6 * * *'   # 한국 시간 오후 3시
+    - cron: '0 12 * * *'  # 한국 시간 밤 9시
   workflow_dispatch:      # Actions 탭에서 수동 실행 버튼 활성화
-  
+
 permissions:
   contents: write         # 저장소 커밋/푸시 권한만 허용
 
@@ -22,12 +22,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 필수 패키지 설치
+      - name: 필수 패키지 및 Playwright 설치
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-nanum
-          pip install google-genai beautifulsoup4 requests pillow
-          playwright install chromium --with-deps
+          pip install google-genai beautifulsoup4 requests pillow playwright
+          python -m playwright install chromium --with-deps
 
       - name: 포스팅 및 이미지 생성 스크립트 실행
         env:
@@ -40,5 +40,5 @@ jobs:
           git config --local user.name "ChooSu Auto Bot"
           git add .
           git status
-          git diff --staged --quiet || git commit -m "Security hardened auto-publish new tech post"
+          git diff --staged --quiet || git commit -m "Auto publish new tech post via GitHub Actions"
           git push
