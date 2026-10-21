@@ -371,19 +371,19 @@ def generate_article_with_gemini(source_data):
 def publish_to_github_pages(article_data, image_rel_paths):
     content = article_data["content"]
 
-    # [IMAGE_1], [IMAGE_2] 등의 위치에 실제 추출/생성된 이미지를 마크다운 문법으로 정확히 삽입
+    # [IMAGE_1], [IMAGE_2] 위치에 GitHub Pages 표준 경로로 이미지 삽입
     for idx, img_path in enumerate(image_rel_paths):
         placeholder = f"[IMAGE_{idx+1}]"
-        md_img = f"\n\n![실제 구축 및 상세 화면 {idx+1}]({img_path})\n\n"
+        # '../assets/...' 형태를 '/auto-poster/assets/...' 형태로 보정
+        clean_path = img_path.replace("../", "/auto-poster/")
+        md_img = f"\n\n![실제 구축 및 상세 화면 {idx+1}]({clean_path})\n\n"
         if placeholder in content:
             content = content.replace(placeholder, md_img, 1)
         else:
             content += md_img
 
-    # 남은 플레이스홀더 제거
     content = re.sub(r'\[IMAGE_\d+\]', '', content)
 
-    # Jekyll 블로그 표준 Front Matter 헤더 생성
     tags_yaml = ", ".join(f'"{t}"' for t in article_data["tags"])
     front_matter = f"""---
 layout: default
@@ -405,16 +405,6 @@ tags: [{tags_yaml}]
 
     with open(post_filepath, "w", encoding="utf-8") as f:
         f.write(front_matter + content)
-
-    # 메인 페이지(index.md)에 최신 글 목록 자동 업데이트
-    index_path = "index.md"
-    if not os.path.exists(index_path):
-        with open(index_path, "w", encoding="utf-8") as f:
-            f.write("---\nlayout: default\ntitle: ChooSu Note\n---\n\n# 📚 ChooSu Note 최신 기술 가이드 목록\n\n")
-
-    post_url_path = f"./_posts/{post_filename}".replace(".md", ".html")
-    with open(index_path, "a", encoding="utf-8") as f:
-        f.write(f"- **[{TODAY_STR}]** [{article_data['title']}](_posts/{post_filename})\n")
 
     print(f"🎉 GitHub Pages 포스팅 파일 생성 완료: {post_filepath} (삽입된 실제 이미지: {len(image_rel_paths)}장)")
 
