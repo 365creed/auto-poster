@@ -6,6 +6,10 @@ on:
     - cron: '0 6 * * *'   # UTC 06:00 = 한국 시간 오후 3:00
     - cron: '0 12 * * *'  # UTC 12:00 = 한국 시간 밤 9:00
   workflow_dispatch:      # Actions 탭에서 수동 실행 버튼 활성화
+  
+permissions:
+  contents: write         # 저장소 커밋/푸시 권한만 허용
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 파이썬 설정
-        uses: setup-python@v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
