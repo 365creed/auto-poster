@@ -3,13 +3,28 @@ layout: default
 title: ChooSu Note | 실전 IT & 인프라 엔지니어링
 ---
 
+<!-- GitHub 기본 테마의 상단 거슬리는 헤더 영역 완전 숨기기 -->
+<style>
+  header.page-header, .page-header {
+    display: none !important;
+  }
+  .main-content {
+    max-width: 1000px !important;
+    padding: 30px 20px !important;
+  }
+  body {
+    background-color: #f8fafc !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+</style>
+
 <!-- 상단 브랜드 히어로 섹션 (화사하고 IT스러운 글래스모피즘 감성) -->
 <div class="hero-banner">
   <div class="hero-badge">⚡ INFRASTRUCTURE & TECH LAB</div>
   <h1 class="hero-title">ChooSu Note</h1>
   <p class="hero-desc">
     Synology NAS, Dell · HPE 서버, NT 및 네트워크 인프라까지.<br>
-    현장에서 직접 겪고 해결하며 축적하는 <strong>엔지니어링 아카이브</strong>
+    현장에서 직접 겪고 해결하며 축적하는 <strong>실무 기술 노하우 & PWA 엔지니어링 아카이브</strong>
   </p>
   
   <!-- IT스러운 기술 스택 / 다루는 분야 뱃지 라인 -->
@@ -57,13 +72,8 @@ title: ChooSu Note | 실전 IT & 인프라 엔지니어링
   {% endfor %}
 </div>
 
-<!-- 스타일시트 (화사하고 화려하면서도 심플한 IT 브랜드 감성) -->
+<!-- 스타일시트 -->
 <style>
-  /* 전체 페이지 폰트 및 배경 미세 보정 */
-  body {
-    background-color: #f8fafc !important;
-  }
-
   /* 히어로 배너 */
   .hero-banner {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
@@ -156,7 +166,7 @@ title: ChooSu Note | 실전 IT & 인프라 엔지니어링
   /* 포스트 카드 그리드 */
   .post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
   }
   .post-card {
@@ -167,13 +177,12 @@ title: ChooSu Note | 실전 IT & 인프라 엔지니어링
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
   }
   .post-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
     border-color: #3b82f6;
   }
 
