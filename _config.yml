@@ -1,7 +1,7 @@
-title: ChooSu Note | 실전 IT & 홈랩 가이드
-description: 시놀로지 NAS, 서버 구축, 실무 트러블슈팅 통합 기술 노트
+title: ChooSu Note | 실전 IT & 인프라 엔지니어링
+description: Synology NAS, Dell/HPE 서버, 네트워크 인프라 실무 기술 아카이브
 url: "https://365creed.github.io"
-baseurl: "/auto-poster"
+baseurl: "/choosu-lab"
 theme: jekyll-theme-cayman
 markdown: kramdown
 timezone: Asia/Seoul
