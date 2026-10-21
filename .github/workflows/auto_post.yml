@@ -3,10 +3,12 @@ name: Auto Tech Blog Publisher
 on:
   schedule:
     - cron: '0 0 * * *'  # 매일 한국 시간 오전 9시 자동 실행
-  workflow_dispatch:      # Actions 탭에서 'Run workflow' 수동 버튼 활성화
+  workflow_dispatch:      # Actions 탭에서 수동 실행 버튼 활성화
 
 permissions:
-  contents: write         # 저장소에 글과 이미지를 커밋/푸시할 수 있는 권한
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   publish:
@@ -20,19 +22,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 필수 패키지 설치
+      - name: 필수 패키지 및 Playwright 설치
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-nanum
-          pip install google-genai beautifulsoup4 requests pillow
-          playwright install chromium --with-deps
+          pip install google-genai beautifulsoup4 requests pillow playwright
+          python -m playwright install chromium --with-deps
 
       - name: 포스팅 및 이미지 생성 스크립트 실행
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python tistory_poster.py
 
-      - name: 변경된 파일(글, 이미지, 히스토리) 자동 커밋 및 푸시
+      - name: 변경된 파일 자동 커밋 및 푸시
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "ChooSu Auto Bot"
