@@ -36,6 +36,6 @@ jobs:
       run: |
         git config --local user.email "actions@github.com"
         git config --local user.name "ChooSu Auto Bot"
-        git add _posts/ assets/ posted_history.txt
+        git add .
         git diff --staged --quiet || git commit -m "Auto publish new tech post"
         git push
