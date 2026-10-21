@@ -163,7 +163,7 @@ def generate_article(source_data):
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',  # 안정적인 모델로 변경
+                model='gemini-3.8-flash',  # 안정적인 모델로 변경
                 contents=prompt
             )
             raw = response.text.replace("**", "")
