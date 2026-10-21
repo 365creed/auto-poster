@@ -32,7 +32,7 @@ jobs:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python tistory_poster.py
 
-    - name: 생성된 포스팅 및 이미지 자동 배포 (Git Push)
+- name: 생성된 포스팅 및 이미지 자동 배포 (Git Push)
       run: |
         git config --local user.email "actions@github.com"
         git config --local user.name "ChooSu Auto Bot"
