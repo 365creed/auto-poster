@@ -131,6 +131,9 @@ def create_code_screenshot_pil(code_text, title_text, filename="terminal_capture
     return f"/auto-poster/{IMAGE_DIR}/{out_filename}"
 
 # Gemini 글 생성
+import time
+
+# Gemini 글 생성 (503 에러 자동 재시도 방어 로직 추가)
 def generate_article(source_data):
     client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
     base_info = f"참고 원문 제목: {source_data['title']}\n내용:\n{source_data['content']}" if source_data else "시놀로지 NAS 또는 실무 PC 세팅 가이드"
@@ -153,7 +156,24 @@ def generate_article(source_data):
     [CONTENT]
     본문 텍스트 ([IMAGE_1], [IMAGE_2] 위치 포함)
     """
-    raw = client.models.generate_content(model='gemini-3.8-flash', contents=prompt).text.replace("**", "")
+
+    # 503 에러 대비 최대 3회 재시도 루프
+    max_retries = 3
+    raw = ""
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',  # 안정적인 모델로 변경
+                contents=prompt
+            )
+            raw = response.text.replace("**", "")
+            break
+        except Exception as e:
+            print(f"⚠️ Gemini API 요청 실패 (시도 {attempt+1}/{max_retries}): {e}")
+            if attempt < max_retries - 1:
+                time.sleep(5)  # 5초 대기 후 재시도
+            else:
+                raise e
 
     tags = ["시놀로지", "홈랩", "IT가이드", "서버구축"]
     if "[TAGS]" in raw:
@@ -162,6 +182,11 @@ def generate_article(source_data):
     code_block = "1. Check System Environment\n2. Configure Storage Path\n3. Apply Network & Firewall Rules\n4. Verify Service Status"
     if "[CODE_BLOCK]" in raw and "[/CODE_BLOCK]" in raw:
         code_block = raw.split("[CODE_BLOCK]")[1].split("[/CODE_BLOCK]")[0].strip()
+
+    title = raw.split("[TITLE]")[1].split("[CONTENT]")[0].strip() if "[TITLE]" in raw else "실전 IT 환경 구축 통합 가이드"
+    content = raw.split("[CONTENT]")[1].strip() if "[CONTENT]" in raw else raw
+
+    return {"title": title, "content": content, "tags": tags, "code_block": code_block}
 
     title = raw.split("[TITLE]")[1].split("[CONTENT]")[0].strip() if "[TITLE]" in raw else "실전 IT 환경 구축 통합 가이드"
     content = raw.split("[CONTENT]")[1].strip() if "[CONTENT]" in raw else raw
