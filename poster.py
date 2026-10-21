@@ -28,7 +28,6 @@ def save_history(identifier):
     with open(HISTORY_FILE, "a", encoding="utf-8") as f:
         f.write(f"{identifier}\n")
 
-# 원문 이미지 가공 및 보안 검증
 def process_and_frame_image(img_bytes, idx):
     try:
         img = Image.open(BytesIO(img_bytes)).convert("RGB")
@@ -42,12 +41,12 @@ def process_and_frame_image(img_bytes, idx):
         filename = f"capture_{STAMP_STR}_{idx}.png"
         out_path = os.path.join(IMAGE_DIR, filename)
         framed.save(out_path, "PNG", quality=95)
-        return f"/auto-poster/{IMAGE_DIR}/{filename}"
+        # 본인의 저장소 이름에 맞게 경로 확인 (/choosu-lab/ 경로 매칭)
+        return f"/choosu-lab/{IMAGE_DIR}/{filename}"
     except Exception as e:
-        print(f"이미지 가공 보안 예외 차단: {e}")
+        print(f"이미지 가공 예외: {e}")
         return None
 
-# dain2013 RSS 안전 수집
 def fetch_source(history):
     rss_url = "https://dain2013.tistory.com/rss"
     try:
@@ -89,7 +88,6 @@ def fetch_source(history):
         print(f"RSS 수집 예외: {e}")
     return None
 
-# PIL 기반 터미널 캡처 이미지 생성
 def create_code_screenshot_pil(code_text, title_text):
     width = 900
     lines = code_text.strip().split("\n")
@@ -128,11 +126,8 @@ def create_code_screenshot_pil(code_text, title_text):
     out_filename = f"term_{STAMP_STR}.png"
     out_path = os.path.abspath(os.path.join(IMAGE_DIR, out_filename))
     framed.save(out_path, "PNG")
-    return f"/auto-poster/{IMAGE_DIR}/{out_filename}"
+    return f"/choosu-lab/{IMAGE_DIR}/{out_filename}"
 
-import time
-
-# Gemini 글 생성 (gemini-3.8-flash 고정 및 503 에러 대비 대기 후 재시도 로직)
 def generate_article(source_data):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -147,7 +142,7 @@ def generate_article(source_data):
     위 내용을 바탕으로 'ChooSu Note' 개인 기술 블로그 스타일의 가이드 글을 작성해주세요.
     
     [절대 금지 및 보안 사항]:
-    - '다인엔시스', 특정 기업명, 영업 멘트, 견적 문의, 납품 안내 같은 홍보성 문구는 원문에 있더라도 절대 포함하지 마세요. 오직 개인 기술 블로그의 객관적인 가이드 글처럼 작성할 것.
+    - '다인엔시스', 특정 기업명, 영업 멘트, 견적 문의, 납품 안내 같은 홍보성 문구는 절대 포함하지 마세요.
     - 마크다운 별표(**)나 샵(##) 기호 사용 금지! 순수 텍스트와 줄바꿈으로만 구성할 것.
 
     [작성 양식]:
@@ -165,31 +160,8 @@ def generate_article(source_data):
     본문 텍스트 ([IMAGE_1], [IMAGE_2] 위치 포함)
     """
 
-    # gemini-3.8-flash로 고정하여 최대 5회 재시도 (트래픽 폭주 대응)
-    max_retries = 5
-    raw = ""
-
-    for attempt in range(max_retries):
-        try:
-            print(f"[gemini-3.8-flash] 글 생성 시도 (시도 {attempt+1}/{max_retries})...")
-            response = client.models.generate_content(
-                model='gemini-3.8-flash',
-                contents=prompt
-            )
-            raw = response.text.replace("**", "")
-            if raw:
-                break
-        except Exception as e:
-            print(f"⚠️ 3.8-flash 요청 실패: {e}")
-            if attempt < max_retries - 1:
-                sleep_sec = (attempt + 1) * 10  # 시도할수록 대기 시간 증가 (10초, 20초, 30초...)
-                print(f"⏳ 서버 혼잡으로 {sleep_sec}초 대기 후 재시도합니다...")
-                time.sleep(sleep_sec)
-            else:
-                raise RuntimeError("gemini-3.8-flash가 지속적인 503/서버 에러로 응답하지 않습니다.")
-
-    if not raw:
-        raise RuntimeError("AI 응답 내용이 비어 있습니다.")
+    response = client.models.generate_content(model='gemini-3.8-flash', contents=prompt)
+    raw = response.text.replace("**", "")
 
     tags = ["시놀로지", "홈랩", "IT가이드", "서버구축"]
     if "[TAGS]" in raw:
@@ -204,12 +176,19 @@ def generate_article(source_data):
 
     return {"title": title, "content": content, "tags": tags, "code_block": code_block}
 
-# GitHub Pages 마크다운 포스트 파일 생성
 def publish_post(article, image_paths):
     content = article["content"]
+    
+    # 법적 AI 고지 문구 자동 삽입 (상단)
+    legal_header = """
+> ⚖️ **법적 고지 및 안내:** 본 포스팅에 포함된 텍스트 및 기술 가이드는 정확성 향상과 효율적인 정보 전달을 위해 **AI(인공지능) 자동화 기술을 활용하여 생성 및 검수**되었습니다.
+---
+"""
+    content = legal_header + "\n" + content
+
     for idx, img_path in enumerate(image_paths):
         placeholder = f"[IMAGE_{idx+1}]"
-        md_img = f"\n\n![실제 화면 {idx+1}]({img_path})\n\n"
+        md_img = f"\n\n![실제 구축 및 상세 화면 {idx+1}]({img_path})\n\n"
         if placeholder in content:
             content = content.replace(placeholder, md_img, 1)
         else:
