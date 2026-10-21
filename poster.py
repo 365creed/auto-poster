@@ -21,7 +21,7 @@ os.makedirs(IMAGE_DIR, exist_ok=True)
 
 
 # =====================================================================
-# 0. 중복 발행 방지 히스토리 관리 함수 (누락되었던 부분)
+# 0. 중복 발행 방지 히스토리 관리
 # =====================================================================
 def load_history():
     if os.path.exists(HISTORY_FILE):
@@ -35,7 +35,7 @@ def save_history(identifier):
 
 
 # =====================================================================
-# 1. 원문 이미지 가공 및 보안 검증
+# 1. 원문 이미지 가공 및 절대 경로 고정
 # =====================================================================
 def process_and_frame_image(img_bytes, idx):
     try:
@@ -52,12 +52,12 @@ def process_and_frame_image(img_bytes, idx):
         framed.save(out_path, "PNG", quality=95)
         return f"/choosu-lab/{IMAGE_DIR}/{filename}"
     except Exception as e:
-        print(f"이미지 가공 보안 예외 차단: {e}")
+        print(f"이미지 가공 예외 차단: {e}")
         return None
 
 
 # =====================================================================
-# 2. dain2013 RSS 안전 수집
+# 2. RSS 원문 수집
 # =====================================================================
 def fetch_source(history):
     rss_url = "https://dain2013.tistory.com/rss"
@@ -102,7 +102,7 @@ def fetch_source(history):
 
 
 # =====================================================================
-# 3. PIL 기반 터미널 캡처 이미지 생성
+# 3. PIL 터미널 캡처 이미지 생성
 # =====================================================================
 def create_code_screenshot_pil(code_text, title_text):
     width = 900
@@ -146,7 +146,7 @@ def create_code_screenshot_pil(code_text, title_text):
 
 
 # =====================================================================
-# 4. Gemini 글 생성 (3.8 고정 + 503 에러 대비 점진적 재시도 로직)
+# 4. Gemini 글 생성 (3.8 고정 + 503 재시도 로직)
 # =====================================================================
 def generate_article(source_data):
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -190,7 +190,7 @@ def generate_article(source_data):
                 model='gemini-3.8-flash',
                 contents=prompt
             )
-            raw = response.text.replace("**", "")
+            raw = response.text
             if raw:
                 break
         except Exception as e:
@@ -220,12 +220,16 @@ def generate_article(source_data):
 
 
 # =====================================================================
-# 5. GitHub Pages 마크다운 포스트 파일 생성 (법적 고지 자동 포함)
+# 5. 마크다운 생성 및 마크다운 기호 강제 제거 정제
 # =====================================================================
 def publish_post(article, image_paths):
     content = article["content"]
     
-    # 법적 AI 고지 문구 자동 삽입 (상단)
+    # 마크다운 기호(**, ## 등) 강제 제거
+    content = re.sub(r'\*\*(.*?)\*\*', r'\1', content)
+    content = re.sub(r'#+\s?', '', content)
+    content = content.replace('**', '')
+
     legal_header = """
 > ⚖️ **법적 고지 및 안내:** 본 포스팅에 포함된 텍스트 및 기술 가이드는 정확성 향상과 효율적인 정보 전달을 위해 **AI(인공지능) 자동화 기술을 활용하여 생성 및 검수**되었습니다.
 ---
@@ -234,7 +238,8 @@ def publish_post(article, image_paths):
 
     for idx, img_path in enumerate(image_paths):
         placeholder = f"[IMAGE_{idx+1}]"
-        md_img = f"\n\n![실제 구축 및 상세 화면 {idx+1}]({img_path})\n\n"
+        clean_img_path = img_path if img_path.startswith("/") else f"/{img_path}"
+        md_img = f"\n\n![실제 구축 및 상세 화면 {idx+1}]({clean_img_path})\n\n"
         if placeholder in content:
             content = content.replace(placeholder, md_img, 1)
         else:
@@ -267,7 +272,7 @@ tags: [{tags_yaml}]
 
 
 # =====================================================================
-# 6. 실행 메인 함수
+# 6. 메인 실행
 # =====================================================================
 if __name__ == "__main__":
     hist = load_history()
