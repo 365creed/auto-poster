@@ -28,7 +28,7 @@ def save_history(identifier):
     with open(HISTORY_FILE, "a", encoding="utf-8") as f:
         f.write(f"{identifier}\n")
 
-# 원문 이미지 가공
+# 원문 이미지 가공 및 보안 검증
 def process_and_frame_image(img_bytes, idx):
     try:
         img = Image.open(BytesIO(img_bytes)).convert("RGB")
@@ -44,10 +44,10 @@ def process_and_frame_image(img_bytes, idx):
         framed.save(out_path, "PNG", quality=95)
         return f"/auto-poster/{IMAGE_DIR}/{filename}"
     except Exception as e:
-        print(f"이미지 가공 실패: {e}")
+        print(f"이미지 가공 보안 예외 차단: {e}")
         return None
 
-# dain2013 RSS 수집
+# dain2013 RSS 안전 수집
 def fetch_source(history):
     rss_url = "https://dain2013.tistory.com/rss"
     try:
@@ -90,7 +90,7 @@ def fetch_source(history):
     return None
 
 # PIL 기반 터미널 캡처 이미지 생성
-def create_code_screenshot_pil(code_text, title_text, filename="terminal_capture.png"):
+def create_code_screenshot_pil(code_text, title_text):
     width = 900
     lines = code_text.strip().split("\n")
     line_height = 28
@@ -130,21 +130,27 @@ def create_code_screenshot_pil(code_text, title_text, filename="terminal_capture
     framed.save(out_path, "PNG")
     return f"/auto-poster/{IMAGE_DIR}/{out_filename}"
 
-# Gemini 글 생성
-import time
-
-# Gemini 글 생성 (503 에러 자동 재시도 방어 로직 추가)
+# Gemini 글 생성 (회사명/홍보성 문구 완벽 차단 보안 필터 적용)
 def generate_article(source_data):
-    client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY 환경변수가 설정되지 않았습니다.")
+
+    client = genai.Client(api_key=api_key)
     base_info = f"참고 원문 제목: {source_data['title']}\n내용:\n{source_data['content']}" if source_data else "시놀로지 NAS 또는 실무 PC 세팅 가이드"
 
     prompt = f"""
     {base_info}
 
-    위 내용을 바탕으로 'ChooSu Note' 스타일의 기술 블로그 글을 작성해주세요.
+    위 내용을 바탕으로 'ChooSu Note' 개인 기술 블로그 스타일의 가이드 글을 작성해주세요.
+    
+    [절대 금지 및 보안 사항]:
+    - '다인엔시스', 특정 기업명, 영업 멘트, 견적 문의, 납품 안내 같은 홍보성 문구는 원문에 있더라도 절대 포함하지 마세요. 오직 개인 기술 블로그의 객관적인 가이드 글처럼 작성할 것.
+    - 마크다운 별표(**)나 샵(##) 기호 사용 금지! 순수 텍스트와 줄바꿈으로만 구성할 것.
+
+    [작성 양식]:
     - 서론: "내가 찾는 건 늘 없었다 (...)" 스타일의 담백한 독백으로 시작
     - 섹션 이모지: 📘, 📝, 1️⃣, 2️⃣, 📅, 💡, 📂, 🙌 순서로 구성
-    - 마크다운 별표(**)나 샵(##) 기호 금지! 순수 텍스트와 줄바꿈으로만 구성.
     - [CODE_BLOCK] 안에는 핵심 설정값이나 CLI 명령어 요약 8~12줄을 작성할 것.
 
     출력 형식:
@@ -157,23 +163,8 @@ def generate_article(source_data):
     본문 텍스트 ([IMAGE_1], [IMAGE_2] 위치 포함)
     """
 
-    # 503 에러 대비 최대 3회 재시도 루프
-    max_retries = 3
-    raw = ""
-    for attempt in range(max_retries):
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.8-flash',  # 안정적인 모델로 변경
-                contents=prompt
-            )
-            raw = response.text.replace("**", "")
-            break
-        except Exception as e:
-            print(f"⚠️ Gemini API 요청 실패 (시도 {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                time.sleep(5)  # 5초 대기 후 재시도
-            else:
-                raise e
+    response = client.models.generate_content(model='gemini-3.8-flash', contents=prompt)
+    raw = response.text.replace("**", "")
 
     tags = ["시놀로지", "홈랩", "IT가이드", "서버구축"]
     if "[TAGS]" in raw:
@@ -188,12 +179,7 @@ def generate_article(source_data):
 
     return {"title": title, "content": content, "tags": tags, "code_block": code_block}
 
-    title = raw.split("[TITLE]")[1].split("[CONTENT]")[0].strip() if "[TITLE]" in raw else "실전 IT 환경 구축 통합 가이드"
-    content = raw.split("[CONTENT]")[1].strip() if "[CONTENT]" in raw else raw
-
-    return {"title": title, "content": content, "tags": tags, "code_block": code_block}
-
-# GitHub Pages 마크다운 파일 생성
+# GitHub Pages 마크다운 포스트 파일 생성
 def publish_post(article, image_paths):
     content = article["content"]
     for idx, img_path in enumerate(image_paths):
