@@ -1,5 +1,10 @@
 title: ChooSu Note | 실전 IT & 홈랩 가이드
-description: 내가 찾는 건 늘 없어서 직접 정리하는 시놀로지 NAS, 서버, IT 실무 노트
+description: 시놀로지 NAS, 서버 구축, 실무 트러블슈팅 통합 기술 노트
+url: "https://365creed.github.io"
+baseurl: "/auto-poster"
 theme: jekyll-theme-cayman
 markdown: kramdown
 timezone: Asia/Seoul
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
