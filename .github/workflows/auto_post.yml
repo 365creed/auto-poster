@@ -2,7 +2,9 @@ name: Auto Tech Blog Publisher
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 매일 한국 시간 오전 9시 자동 실행
+    - cron: '0 0 * * *'   # UTC 00:00 = 한국 시간 오전 9:00
+    - cron: '0 6 * * *'   # UTC 06:00 = 한국 시간 오후 3:00
+    - cron: '0 12 * * *'  # UTC 12:00 = 한국 시간 밤 9:00
   workflow_dispatch:      # Actions 탭에서 수동 실행 버튼 활성화
 
 permissions:
