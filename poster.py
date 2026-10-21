@@ -130,7 +130,9 @@ def create_code_screenshot_pil(code_text, title_text):
     framed.save(out_path, "PNG")
     return f"/auto-poster/{IMAGE_DIR}/{out_filename}"
 
-# Gemini 글 생성 (회사명/홍보성 문구 완벽 차단 보안 필터 적용)
+import time
+
+# Gemini 글 생성 (gemini-3.8-flash 고정 및 503 에러 대비 대기 후 재시도 로직)
 def generate_article(source_data):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -163,8 +165,31 @@ def generate_article(source_data):
     본문 텍스트 ([IMAGE_1], [IMAGE_2] 위치 포함)
     """
 
-    response = client.models.generate_content(model='gemini-3.8-flash', contents=prompt)
-    raw = response.text.replace("**", "")
+    # gemini-3.8-flash로 고정하여 최대 5회 재시도 (트래픽 폭주 대응)
+    max_retries = 5
+    raw = ""
+
+    for attempt in range(max_retries):
+        try:
+            print(f"[gemini-3.8-flash] 글 생성 시도 (시도 {attempt+1}/{max_retries})...")
+            response = client.models.generate_content(
+                model='gemini-3.8-flash',
+                contents=prompt
+            )
+            raw = response.text.replace("**", "")
+            if raw:
+                break
+        except Exception as e:
+            print(f"⚠️ 3.8-flash 요청 실패: {e}")
+            if attempt < max_retries - 1:
+                sleep_sec = (attempt + 1) * 10  # 시도할수록 대기 시간 증가 (10초, 20초, 30초...)
+                print(f"⏳ 서버 혼잡으로 {sleep_sec}초 대기 후 재시도합니다...")
+                time.sleep(sleep_sec)
+            else:
+                raise RuntimeError("gemini-3.8-flash가 지속적인 503/서버 에러로 응답하지 않습니다.")
+
+    if not raw:
+        raise RuntimeError("AI 응답 내용이 비어 있습니다.")
 
     tags = ["시놀로지", "홈랩", "IT가이드", "서버구축"]
     if "[TAGS]" in raw:
