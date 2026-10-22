@@ -1,5 +1,14 @@
 [
   {
+    "verified_at": "2026-10-22 20:05:03 KST",
+    "target_file": "_posts/2026-10-22-lab-archive-006-20261022_200502.md",
+    "lesson_title": "시스템 기본 환경 구성 및 인터페이스 작동 원리 탐구 #6",
+    "os_scene": "click_trainer",
+    "verdict": "APPROVED",
+    "score": 100,
+    "notes": "1280x800 캡처 3장 및 본문 구조 내부 검증 통과 (외부 비노출)"
+  },
+  {
     "verified_at": "2026-10-22 17:12:12 KST",
     "target_file": "_posts/2026-10-22-lab-05-from-eniac-to-laptop-20261022_171211.md",
     "lesson_title": "진공관 계산기에서 모바일 노트북까지: 0과 1의 전기 신호가 데이터를 처리하는 근원적 원리",
