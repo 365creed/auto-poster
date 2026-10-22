@@ -1,8 +1,7 @@
-title: ChooSu Note | 실전 IT & 인프라 엔지니어링
-description: Synology NAS, Dell/HPE 서버, 네트워크 인프라 실무 기술 아카이브
+title: "ChooSu Note | 세상에서 가장 친절한 컴퓨터 기초 학교 & 가상 OS 실습실"
+description: "컴퓨터와 노트북의 역사부터 '자, 이게 클릭이야!'까지 — 가상화 OS 환경에서 AI가 직접 조작하고 게임을 플레이하며 캡처한 화면으로 배우는 초보자 눈높이 기초 교실"
 url: "https://365creed.github.io"
 baseurl: "/choosu-lab"
-theme: jekyll-theme-cayman
 markdown: kramdown
 timezone: Asia/Seoul
 plugins:

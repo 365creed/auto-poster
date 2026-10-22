@@ -1,0 +1,239 @@
+---
+layout: default
+---
+
+<style>
+  .post-hero {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+  .post-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .badge-pill {
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge-stage { background: var(--primary-soft); color: var(--primary); }
+  .badge-slot-morning { background: #fef3c7; color: #b45309; }
+  .badge-slot-afternoon { background: #dcfce7; color: #15803d; }
+  .badge-slot-manual { background: #f3e8ff; color: #6d28d9; }
+  .badge-os { background: #e0f2fe; color: #0369a1; }
+
+  .post-main-title {
+    font-size: 2.15rem;
+    font-weight: 900;
+    line-height: 1.35;
+    margin: 0 0 12px 0;
+    color: var(--text-main);
+  }
+  .post-subtitle {
+    font-size: 1.12rem;
+    color: var(--text-secondary);
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+  }
+  .post-meta-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .post-tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .post-tag {
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    padding: 4px 11px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .post-layout-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 960px) {
+    .post-layout-grid { grid-template-columns: 1fr; }
+    .post-hero { padding: 24px; }
+    .post-main-title { font-size: 1.65rem; }
+  }
+  .post-article-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    padding: 40px 44px;
+    box-shadow: var(--shadow-sm);
+    font-size: 1.08rem;
+    line-height: 1.9;
+    color: var(--text-main);
+  }
+  .post-article-card h2 {
+    margin-top: 42px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .post-article-card blockquote {
+    margin: 24px 0;
+    padding: 18px 22px;
+    background: var(--primary-soft);
+    border-left: 5px solid var(--primary);
+    border-radius: 0 14px 14px 0;
+    font-weight: 600;
+  }
+  .post-article-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.96rem;
+    border: 1px solid var(--border-color);
+  }
+  .post-article-card th, .post-article-card td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+  .post-article-card th { background: var(--bg-subtle); font-weight: 800; }
+  figure.os-screenshot-card {
+    margin: 32px 0;
+    background: #0f172a;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #334155;
+    box-shadow: 0 16px 35px -8px rgba(15, 23, 42, 0.25);
+  }
+  .os-screenshot-bar {
+    background: #1e293b;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  figure.os-screenshot-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  figure.os-screenshot-card figcaption {
+    padding: 12px 18px;
+    background: #0f172a;
+    color: #38bdf8;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .post-sidebar {
+    position: sticky;
+    top: 86px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .side-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+  }
+  .side-box h4 { margin: 0 0 12px 0; font-size: 1rem; font-weight: 800; }
+  .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem; }
+  .toc-list a { color: var(--text-secondary); font-weight: 600; display: block; padding: 6px 10px; border-radius: 8px; }
+  .toc-list a:hover { background: var(--primary-soft); color: var(--primary); }
+</style>
+
+<article>
+  <header class="post-hero">
+    <div class="post-badges">
+      <span class="badge-pill badge-stage">🎓 {{ page.stage | default: "기초 컴퓨터 교실" }}</span>
+      {% if page.slot_id == "evening_manual" %}
+        <span class="badge-pill badge-slot-manual">{{ page.slot_badge | default: "🌙 저녁 수동 노트" }}</span>
+      {% elsif page.slot_id == "afternoon_auto" %}
+        <span class="badge-pill badge-slot-afternoon">{{ page.slot_badge | default: "🎮 오후 3시 가상 OS 실습" }}</span>
+      {% else %}
+        <span class="badge-pill badge-slot-morning">{{ page.slot_badge | default: "☀️ 오전 9시 기초 원리" }}</span>
+      {% endif %}
+      <span class="badge-pill badge-os">🖥️ {{ page.os_type | default: "가상 OS 환경 직접 실습" }}</span>
+    </div>
+
+    <h1 class="post-main-title">{{ page.title }}</h1>
+    {% if page.subtitle %}
+      <p class="post-subtitle">{{ page.subtitle }}</p>
+    {% endif %}
+
+    <div class="post-meta-bar">
+      <div>
+        <span>📅 발행일: {{ page.date | date: "%Y년 %m월 %d일 %H:%M" }}</span>
+        &nbsp;·&nbsp;
+        <span>🌱 난이도: <strong>{{ page.difficulty | default: "Lv.1 완전 입문" }}</strong></span>
+      </div>
+      {% if page.tags.size > 0 %}
+        <div class="post-tag-list">
+          {% for tag in page.tags %}
+            <span class="post-tag">#{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="post-layout-grid">
+    <div>
+      <div class="post-article-card" id="postArticleContent">
+        {{ content }}
+      </div>
+    </div>
+
+    <aside class="post-sidebar">
+      <div class="side-box">
+        <h4>📑 오늘 수업 목차</h4>
+        <ul class="toc-list" id="autoTocList"></ul>
+      </div>
+      <div class="side-box">
+        <h4>⏰ 하루 3번 블로그 시간표</h4>
+        <div style="font-size:0.86rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:10px;">
+          <div><strong>☀️ 오전 09:00 (자동)</strong><br>컴퓨터·노트북의 역사와 0과 1 근원적 원리 수업</div>
+          <div><strong>🎮 오후 15:00 (자동)</strong><br>가상 OS에서 AI가 직접 클릭·게임 플레이 후 스크린샷 실습</div>
+          <div><strong>🌙 저녁 시간 (수동)</strong><br>인간 에디터가 직접 작성하는 친절한 보충 노트</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</article>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const container = document.getElementById("postArticleContent");
+    const toc = document.getElementById("autoTocList");
+    if (!container || !toc) return;
+    const headings = container.querySelectorAll("h2, h3");
+    headings.forEach(function(h, idx) {
+      if (!h.id) h.id = "section-" + idx;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#" + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      toc.appendChild(li);
+    });
+  });
+</script>

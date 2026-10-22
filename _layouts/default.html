@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.subtitle | default: site.description }}">
+  <link rel="manifest" href="{{ site.baseurl }}/manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-soft: #eff6ff;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+    }
+    [data-theme="dark"] {
+      --bg-page: #0b1120;
+      --bg-surface: #1e293b;
+      --bg-subtle: #0f172a;
+      --text-main: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary: #38bdf8;
+      --primary-hover: #7dd3fc;
+      --primary-soft: rgba(56, 189, 248, 0.14);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 14px 30px rgba(0, 0, 0, 0.4);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    .site-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+    }
+    [data-theme="dark"] .site-navbar { background: rgba(15, 23, 42, 0.88); }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--text-main);
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .nav-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--bg-subtle); color: var(--primary); }
+    .nav-btn.studio-cta {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid rgba(37, 99, 235, 0.25);
+    }
+    .theme-toggle {
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .page-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 24px 72px;
+    }
+    .site-footer {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      padding: 36px 24px;
+      margin-top: 64px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-navbar">
+    <div class="nav-inner">
+      <a href="{{ site.baseurl }}/" class="brand-logo">
+        <span class="brand-icon">🖱️</span>
+        <span>ChooSu 컴퓨터 기초 학교</span>
+      </a>
+      <nav class="nav-links">
+        <a href="{{ site.baseurl }}/" class="nav-btn">📚 전체 수업 보기</a>
+        <a href="{{ site.baseurl }}/#curriculum-roadmap" class="nav-btn">🗺️ 기초 커리큘럼</a>
+        <a href="{{ site.baseurl }}/studio.html" class="nav-btn studio-cta">🌙 저녁 수동 포스팅 스튜디오</a>
+        <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">🌙 다크 모드</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-container">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>ChooSu Note — 세상에서 가장 친절한 컴퓨터 기초 학교 & 가상 OS 실습실</strong><br>
+        <span>오전 9시(기초 원리) · 오후 3시(가상 OS·게임 실습) AI 자동 수업 &amp; 저녁 인간 에디터 수동 발행</span>
+      </div>
+      <div>
+        <span>⚖️ AI 가상 OS 실습 캡처 및 친절한 기초 교안 자동화 시스템 적용</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const saved = localStorage.getItem('choosu-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+    })();
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('choosu-theme', next);
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+    }
+  </script>
+</body>
+</html>

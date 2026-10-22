@@ -1,13 +1,13 @@
 {
-  "name": "ChooSu Note - IT & Infra Lab",
-  "short_name": "ChooSu Note",
+  "name": "ChooSu Note — 친절한 컴퓨터 기초 학교 & 가상 OS 실험실",
+  "short_name": "ChooSu 컴퓨터학교",
   "start_url": "/choosu-lab/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=192&h=192&fit=crop",
+      "src": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=192&h=192&fit=crop",
       "sizes": "192x192",
       "type": "image/png"
     }
