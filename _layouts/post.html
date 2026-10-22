@@ -3,40 +3,38 @@ layout: default
 ---
 
 <style>
-  .post-hero {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 22px;
-    padding: 36px 40px;
+  .argon-post-hero {
+    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 40px 44px;
     margin-bottom: 32px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--argon-shadow);
+    position: relative;
   }
   .post-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-  .badge-pill {
-    font-size: 0.82rem;
+  .argon-pill {
+    font-size: 0.78rem;
     font-weight: 800;
-    padding: 6px 14px;
+    padding: 5px 13px;
     border-radius: 30px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
-  .badge-stage { background: var(--primary-soft); color: var(--primary); }
-  .badge-slot-morning { background: #fef3c7; color: #b45309; }
-  .badge-slot-afternoon { background: #dcfce7; color: #15803d; }
-  .badge-slot-manual { background: #f3e8ff; color: #6d28d9; }
-  .badge-os { background: #e0f2fe; color: #0369a1; }
+  .pill-stage { background: rgba(255,255,255,0.2); color: #fff; }
+  .pill-verified { background: #2dce89; color: #fff; }
+  .pill-os { background: #11cdef; color: #172b4d; }
 
   .post-main-title {
-    font-size: 2.15rem;
+    font-size: 2.1rem;
     font-weight: 900;
     line-height: 1.35;
     margin: 0 0 12px 0;
-    color: var(--text-main);
+    color: #ffffff !important;
   }
   .post-subtitle {
-    font-size: 1.12rem;
-    color: var(--text-secondary);
+    font-size: 1.08rem;
+    color: rgba(255,255,255,0.9);
     margin: 0 0 20px 0;
     line-height: 1.6;
   }
@@ -46,101 +44,144 @@ layout: default
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.88);
   }
-  .post-tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .post-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
   .post-tag {
-    background: var(--bg-subtle);
-    color: var(--text-secondary);
-    padding: 4px 11px;
+    background: rgba(23, 43, 77, 0.35);
+    color: #fff;
+    padding: 4px 10px;
     border-radius: 8px;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
   }
+
   .post-layout-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
-    gap: 32px;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 30px;
     align-items: start;
   }
   @media (max-width: 960px) {
     .post-layout-grid { grid-template-columns: 1fr; }
-    .post-hero { padding: 24px; }
-    .post-main-title { font-size: 1.65rem; }
+    .argon-post-hero { padding: 26px; }
+    .post-main-title { font-size: 1.6rem; }
   }
-  .post-article-card {
+
+  .argon-article-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: 22px;
-    padding: 40px 44px;
-    box-shadow: var(--shadow-sm);
-    font-size: 1.08rem;
+    border-radius: 20px;
+    padding: 42px 46px;
+    box-shadow: var(--argon-shadow-sm);
+    font-size: 1.06rem;
     line-height: 1.9;
     color: var(--text-main);
   }
-  .post-article-card h2 {
-    margin-top: 42px;
+  .argon-article-card h2 {
+    margin-top: 40px;
     margin-bottom: 16px;
     padding-bottom: 10px;
     border-bottom: 2px solid var(--border-color);
-    font-size: 1.5rem;
+    font-size: 1.48rem;
     font-weight: 800;
+    color: var(--text-main);
   }
-  .post-article-card blockquote {
+  .argon-article-card blockquote {
     margin: 24px 0;
     padding: 18px 22px;
-    background: var(--primary-soft);
-    border-left: 5px solid var(--primary);
+    background: var(--argon-primary-soft);
+    border-left: 5px solid var(--argon-primary);
     border-radius: 0 14px 14px 0;
     font-weight: 600;
   }
-  .post-article-card table {
+  .argon-article-card table {
     width: 100%;
     border-collapse: collapse;
     margin: 24px 0;
-    font-size: 0.96rem;
+    font-size: 0.95rem;
     border: 1px solid var(--border-color);
   }
-  .post-article-card th, .post-article-card td {
+  .argon-article-card th, .argon-article-card td {
     padding: 12px 16px;
     border-bottom: 1px solid var(--border-color);
     text-align: left;
   }
-  .post-article-card th { background: var(--bg-subtle); font-weight: 800; }
+  .argon-article-card th { background: var(--bg-subtle); font-weight: 800; }
+
   figure.os-screenshot-card {
     margin: 32px 0;
-    background: #0f172a;
+    background: #172b4d;
     border-radius: 16px;
     overflow: hidden;
-    border: 2px solid #334155;
-    box-shadow: 0 16px 35px -8px rgba(15, 23, 42, 0.25);
+    border: 2px solid #5e72e4;
+    box-shadow: var(--argon-shadow);
   }
   .os-screenshot-bar {
-    background: #1e293b;
+    background: #0f172a;
     padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #cbd5e1;
-    font-size: 0.85rem;
+    color: #fff;
+    font-size: 0.84rem;
     font-weight: 700;
   }
-  figure.os-screenshot-card img {
-    display: block;
-    width: 100%;
-    height: auto;
+  .os-bar-badge {
+    background: #5e72e4;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.74rem;
   }
+  figure.os-screenshot-card img { display: block; width: 100%; height: auto; }
   figure.os-screenshot-card figcaption {
     padding: 12px 18px;
-    background: #0f172a;
-    color: #38bdf8;
+    background: #172b4d;
+    color: #11cdef;
     font-size: 0.9rem;
     font-weight: 700;
     text-align: center;
   }
+
+  /* GPT Think Verification Certificate Box */
+  .argon-verify-box {
+    margin-top: 36px;
+    background: var(--bg-subtle);
+    border: 2px solid #2dce89;
+    border-radius: 16px;
+    padding: 22px 24px;
+  }
+  .verify-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .verify-badge {
+    background: #2dce89;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 0.85rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+  .verify-time { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; }
+  .verify-body { font-size: 0.95rem; color: var(--text-main); margin: 8px 0 14px 0; font-weight: 600; }
+  .verify-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    border-top: 1px dashed var(--border-color);
+    padding-top: 10px;
+  }
+
   .post-sidebar {
     position: sticky;
     top: 86px;
@@ -151,28 +192,23 @@ layout: default
   .side-box {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 22px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--argon-shadow-sm);
   }
   .side-box h4 { margin: 0 0 12px 0; font-size: 1rem; font-weight: 800; }
   .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem; }
   .toc-list a { color: var(--text-secondary); font-weight: 600; display: block; padding: 6px 10px; border-radius: 8px; }
-  .toc-list a:hover { background: var(--primary-soft); color: var(--primary); }
+  .toc-list a:hover { background: var(--argon-primary-soft); color: var(--argon-primary); }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; margin-bottom: 8px; cursor: pointer; }
 </style>
 
 <article>
-  <header class="post-hero">
+  <header class="argon-post-hero">
     <div class="post-badges">
-      <span class="badge-pill badge-stage">🎓 {{ page.stage | default: "기초 컴퓨터 교실" }}</span>
-      {% if page.slot_id == "evening_manual" %}
-        <span class="badge-pill badge-slot-manual">{{ page.slot_badge | default: "🌙 저녁 수동 노트" }}</span>
-      {% elsif page.slot_id == "afternoon_auto" %}
-        <span class="badge-pill badge-slot-afternoon">{{ page.slot_badge | default: "🎮 오후 3시 가상 OS 실습" }}</span>
-      {% else %}
-        <span class="badge-pill badge-slot-morning">{{ page.slot_badge | default: "☀️ 오전 9시 기초 원리" }}</span>
-      {% endif %}
-      <span class="badge-pill badge-os">🖥️ {{ page.os_type | default: "가상 OS 환경 직접 실습" }}</span>
+      <span class="argon-pill pill-stage">🎓 {{ page.stage | default: "기초 컴퓨터 교실" }}</span>
+      <span class="argon-pill pill-os">🖥️ {{ page.os_type | default: "Gemini 가상 OS 테스트" }}</span>
+      <span class="argon-pill pill-verified">🛡️ {{ page.verified_by | default: "GPT Think 검증 통과" }}</span>
     </div>
 
     <h1 class="post-main-title">{{ page.title }}</h1>
@@ -182,7 +218,7 @@ layout: default
 
     <div class="post-meta-bar">
       <div>
-        <span>📅 발행일: {{ page.date | date: "%Y년 %m월 %d일 %H:%M" }}</span>
+        <span>📅 {{ page.date | date: "%Y년 %m월 %d일 %H:%M" }}</span>
         &nbsp;·&nbsp;
         <span>🌱 난이도: <strong>{{ page.difficulty | default: "Lv.1 완전 입문" }}</strong></span>
       </div>
@@ -198,7 +234,7 @@ layout: default
 
   <div class="post-layout-grid">
     <div>
-      <div class="post-article-card" id="postArticleContent">
+      <div class="argon-article-card" id="postArticleContent">
         {{ content }}
       </div>
     </div>
@@ -208,12 +244,21 @@ layout: default
         <h4>📑 오늘 수업 목차</h4>
         <ul class="toc-list" id="autoTocList"></ul>
       </div>
+
       <div class="side-box">
-        <h4>⏰ 하루 3번 블로그 시간표</h4>
-        <div style="font-size:0.86rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:10px;">
-          <div><strong>☀️ 오전 09:00 (자동)</strong><br>컴퓨터·노트북의 역사와 0과 1 근원적 원리 수업</div>
-          <div><strong>🎮 오후 15:00 (자동)</strong><br>가상 OS에서 AI가 직접 클릭·게임 플레이 후 스크린샷 실습</div>
-          <div><strong>🌙 저녁 시간 (수동)</strong><br>인간 에디터가 직접 작성하는 친절한 보충 노트</div>
+        <h4>✅ 나도 따라 해봤어요! (실습 체크)</h4>
+        <label class="check-item"><input type="checkbox"> 1단계 사진 보고 버튼 위치 찾기</label>
+        <label class="check-item"><input type="checkbox"> 2단계 마우스로 직접 클릭해 보기</label>
+        <label class="check-item"><input type="checkbox"> 3단계 바뀐 결과 화면 확인하기</label>
+      </div>
+
+      <div class="side-box" style="border-top: 4px solid #5e72e4;">
+        <h4>🛡️ 파이프라인 검증 정보</h4>
+        <div style="font-size:0.85rem; color:var(--text-secondary); line-height:1.65;">
+          • <b>생산/테스트</b>: Gemini Virtual OS<br>
+          • <b>외관 테마</b>: Argon Design System<br>
+          • <b>추론 검증</b>: GPT Think QA Gate<br>
+          • <a href="{{ site.baseurl }}/status.html" style="font-weight:800;">점검 대시보드에서 상세 보기 &rarr;</a>
         </div>
       </div>
     </aside>

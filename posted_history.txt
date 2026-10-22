@@ -1,3 +1,4 @@
-lesson-01-what-is-click
-lesson-02-minesweeper-ai-play
-manual-20261022_141821
+lesson-01-rename-pc
+lesson-02-what-is-click
+lesson-03-minesweeper-ai-play
+manual-20261022_143512

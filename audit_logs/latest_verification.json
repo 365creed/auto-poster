@@ -1,0 +1,29 @@
+{
+  "verified_at": "2026-10-22 14:35:12 KST",
+  "target_type": "POST_AND_VIRTUAL_OS_TEST",
+  "target_file": "_posts/2026-10-22-manual-20261022_143512-20261022_143512.md",
+  "lesson_title": "바탕화면 아이콘이 너무 작아서 안 보일 때! 3초 만에 큼지막하게 키우는 법",
+  "os_scene": "desktop_windows",
+  "producer": "Gemini (Virtual OS Sandbox Producer)",
+  "verifier": "GPT Think Verify Engine (Rule + CoT Fallback)",
+  "verdict": "APPROVED",
+  "score": 100,
+  "checks": [
+    {
+      "item": "가상 OS 3단계 스크린샷 무결성",
+      "status": "PASS",
+      "detail": "1280x800 캡처 3장 정상 생성 확인"
+    },
+    {
+      "item": "컴맹 눈높이 단계별 설명 & 비교표",
+      "status": "PASS",
+      "detail": "일상 비유 인용구, 비교표, 1~3단계 따라하기 구조 완비"
+    },
+    {
+      "item": "Argon 디자인 카드 & Front Matter 규격",
+      "status": "PASS",
+      "detail": "Argon 포스트 레이아웃 및 OS 창 프레임 정상 적용"
+    }
+  ],
+  "reasoning_summary": "[CoT 추론 검증 통과] 1) 제미나이가 가상 OS(desktop_windows)에서 실행한 1~3단계 클릭 좌표와 화면 캡처 3장이 본문 설명 순서와 정확히 일치합니다. 2) 컴퓨터를 전혀 모르는 입문자도 당황하지 않도록 전문 용어를 일상 비유로 풀어썼으며, 실수 복구 방법(Esc/취소)이 명시되어 있습니다. 3) Argon 테마의 인디고(#5e72e4)·민트(#2dce89) 시각 컴포넌트 규격을 준수하여 Git 배포를 승인합니다."
+}
