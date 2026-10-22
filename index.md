@@ -259,7 +259,7 @@ title: 세상에서 가장 친절한 컴퓨터 기초 학교 (Argon Edition)
     <div class="ops-card">
       <div class="ops-tag">🌙 저녁 수동 + Git 무중단 운영</div>
       <div class="ops-title">Git 자동 배포 &amp; 관제 센터</div>
-      <div class="ops-desc"><a href="{{ site.baseurl }}/status.html" style="color:#11cdef; text-decoration:underline; font-weight:800;">작동 구조 &amp; 자가 점검 센터</a>에서 언제든 작동 상태를 확인합니다.</div>
+      <div class="ops-desc"><a href="{{ '/status.html' | relative_url }}" style="color:#11cdef; text-decoration:underline; font-weight:800;">작동 구조 &amp; 자가 점검 센터</a>에서 언제든 작동 상태를 확인합니다.</div>
     </div>
   </div>
 </section>
@@ -303,7 +303,7 @@ title: 세상에서 가장 친절한 컴퓨터 기초 학교 (Argon Edition)
   {% for post in site.posts %}
     {% assign slot_type = post.slot_id | default: "morning_auto" %}
     <article class="post-card" data-slot="{{ slot_type }}" data-search="{{ post.title | downcase }} {{ post.subtitle | downcase }} {{ post.tags | join: ' ' | downcase }}">
-      <a href="{{ site.baseurl }}{{ post.url }}" class="card-thumb">
+      <a href="{{ post.url | relative_url }}" class="card-thumb">
         {% if post.thumbnail and post.thumbnail != "" %}
           <img src="{{ post.thumbnail }}" alt="{{ post.title }}" loading="lazy">
         {% endif %}
@@ -318,7 +318,7 @@ title: 세상에서 가장 친절한 컴퓨터 기초 학교 (Argon Edition)
         </div>
 
         <h2 class="card-title">
-          <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         </h2>
 
         <p class="card-excerpt">
@@ -331,7 +331,7 @@ title: 세상에서 가장 친절한 컴퓨터 기초 학교 (Argon Edition)
               <span class="tag-chip">#{{ tag }}</span>
             {% endfor %}
           </div>
-          <a href="{{ site.baseurl }}{{ post.url }}" style="font-weight:800; font-size:0.86rem;">따라 하기 &rarr;</a>
+          <a href="{{ post.url | relative_url }}" style="font-weight:800; font-size:0.86rem;">따라 하기 &rarr;</a>
         </div>
       </div>
     </article>

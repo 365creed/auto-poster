@@ -56,7 +56,7 @@ def _draw_cursor_and_click(draw, cx, cy, label_text, is_right_click=False, is_do
     draw.polygon(arrow_pts, fill="#ffffff", outline="#172b4d")
 
     pill_x = min(cx + 32, 790)
-    pill_y = max(cy - 36, 62)
+    pill_y = (cy + 30) if cy > 420 else max(cy - 42, 62)
     pill_w = min(max(len(label_text) * 14 + 36, 250), 455)
     bg_col = "#f5365c" if is_right_click else "#facc15"
     fg_col = "#ffffff" if is_right_click else "#172b4d"
@@ -102,11 +102,11 @@ def render_os_desktop_pil(scene_type, step_idx, lesson_title, out_png_path, code
         # Windows 11 [설정 -> 시스템 -> 정보] 창
         draw.rounded_rectangle([(190, 76), (1230, 575)], radius=18, fill="#f8fafc", outline="#5e72e4", width=3)
         draw.rounded_rectangle([(190, 76), (1230, 128)], radius=18, fill="#172b4d")
-        draw.text((218, 92), "⚙️ 설정 (Settings)  >  시스템 (System)  >  정보 (이 PC의 이름 바꾸기)", fill="#ffffff", font=f["bold"])
+        draw.text((218, 92), "[설정] 설정 (Settings)  >  시스템 (System)  >  정보 (이 PC의 이름 바꾸기)", fill="#ffffff", font=f["bold"])
 
         # 좌측 설정 사이드바 메뉴
         draw.rectangle([(193, 128), (390, 572)], fill="#f1f5f9")
-        side_menus = ["💻 시스템 (System)", "🛜 블루투스 및 장치", "🌐 네트워크 및 인터넷", "🎨 개인 설정 (배경/테마)", "🔒 계정 및 보안"]
+        side_menus = ["■ 시스템 (System)", "● 블루투스 및 장치", "● 네트워크 및 인터넷", "● 개인 설정 (배경/테마)", "● 계정 및 보안"]
         my = 152
         for m_idx, m_txt in enumerate(side_menus):
             if m_idx == 0:
@@ -120,7 +120,7 @@ def render_os_desktop_pil(scene_type, step_idx, lesson_title, out_png_path, code
         cur_pc_name = "우리집-첫노트북" if step_idx == 3 else "DESKTOP-8F9K2A1"
         name_badge_col = "#2dce89" if step_idx == 3 else "#fb6340"
         draw.rounded_rectangle([(420, 150), (1195, 275)], radius=14, fill="#ffffff", outline="#cbd5e1", width=2)
-        draw.text((448, 170), f"🖥️ 현재 PC 이름:  {cur_pc_name}", fill="#172b4d", font=f["title"])
+        draw.text((448, 170), f"■ 현재 PC 이름:  {cur_pc_name}", fill="#172b4d", font=f["title"])
         draw.rounded_rectangle([(448, 210), (775, 245)], radius=8, fill="#eff6ff")
         draw.text((462, 218), "상태: 변경 완료! (공유기·블루투스 표시 이름)" if step_idx == 3 else "상태: 공장 초기 임시 이름 (구분하기 어려움)", fill="#1d4ed8", font=f["sm_b"])
 
@@ -131,7 +131,7 @@ def render_os_desktop_pil(scene_type, step_idx, lesson_title, out_png_path, code
 
         # 하단 장치 사양 카드
         draw.rounded_rectangle([(420, 295), (1195, 548)], radius=14, fill="#ffffff", outline="#cbd5e1", width=2)
-        draw.text((448, 316), "📋 제미나이 가상 OS 테스트 사양 및 점검 로그", fill="#172b4d", font=f["h3"])
+        draw.text((448, 316), "▶ 제미나이 가상 OS 테스트 사양 및 점검 로그", fill="#172b4d", font=f["h3"])
         specs = [
             f"• 장치 이름 (Hostname):  {cur_pc_name}",
             "• 프로세서 (두뇌 CPU):  ChooSu Virtual Core i5 (가상 실습 환경)",
@@ -148,7 +148,7 @@ def render_os_desktop_pil(scene_type, step_idx, lesson_title, out_png_path, code
         elif step_idx == 2:
             # 이름 바꾸기 모달 팝업 창 렌더링
             draw.rounded_rectangle([(480, 220), (1050, 510)], radius=16, fill="#172b4d", outline="#11cdef", width=3)
-            draw.text((515, 248), "✏️ PC 이름 바꾸기 (새 이름 입력)", fill="#ffffff", font=f["h3"])
+            draw.text((515, 248), "▶ PC 이름 바꾸기 (새 이름 입력)", fill="#ffffff", font=f["h3"])
             draw.text((515, 284), "현재 이름: DESKTOP-8F9K2A1  →  알아보기 쉬운 이름으로 바꿔보세요!", fill="#cbd5e1", font=f["sm"])
             # 입력창
             draw.rounded_rectangle([(515, 322), (1010, 382)], radius=10, fill="#ffffff", outline="#5e72e4", width=3)
@@ -158,7 +158,7 @@ def render_os_desktop_pil(scene_type, step_idx, lesson_title, out_png_path, code
             draw.text((782, 437), "다음 (저장)", fill="#ffffff", font=f["bold"])
             draw.rounded_rectangle([(890, 420), (1010, 472)], radius=10, fill="#475569")
             draw.text((930, 437), "취소", fill="#ffffff", font=f["bold"])
-            _draw_cursor_and_click(draw, 810, 448, "2단계: '우리집-첫노트북' 입력 후 [다음] 클릭!")
+            _draw_cursor_and_click(draw, 810, 468, "2단계: '우리집-첫노트북' 입력 후 [다음] 클릭!")
         else:
             _draw_cursor_and_click(draw, 610, 190, "3단계: 내 PC 이름이 '우리집-첫노트북'으로 변경 완료!", is_double=True)
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.subtitle | default: site.description }}">
-  <link rel="manifest" href="{{ site.baseurl }}/manifest.json">
+  <link rel="manifest" href="{{ '/manifest.json' | relative_url }}">
   <meta name="theme-color" content="#5e72e4">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
@@ -159,14 +159,14 @@
 <body>
   <header class="argon-navbar">
     <div class="nav-inner">
-      <a href="{{ site.baseurl }}/" class="brand-logo">
+      <a href="{{ '/' | relative_url }}" class="brand-logo">
         <span class="argon-logo-badge">🖱️</span>
         <span>ChooSu 기초 컴퓨터 학교 <small style="font-size:0.72rem; color:var(--argon-primary); font-weight:800; margin-left:4px;">ARGON EDITION</small></span>
       </a>
       <nav class="nav-links">
-        <a href="{{ site.baseurl }}/" class="nav-btn">📚 전체 수업</a>
-        <a href="{{ site.baseurl }}/status.html" class="nav-btn status-cta">🛡️ 작동 구조 &amp; 자가 점검 센터</a>
-        <a href="{{ site.baseurl }}/studio.html" class="nav-btn studio-cta">🌙 저녁 수동 스튜디오</a>
+        <a href="{{ '/' | relative_url }}" class="nav-btn">📚 전체 수업</a>
+        <a href="{{ '/' | relative_url }}status.html" class="nav-btn status-cta">🛡️ 작동 구조 &amp; 자가 점검 센터</a>
+        <a href="{{ '/' | relative_url }}studio.html" class="nav-btn studio-cta">🌙 저녁 수동 스튜디오</a>
         <button class="util-btn" onclick="cycleFontSize()" id="fontScaleBtn" title="컴맹·어르신을 위한 글자 크기 확대">🔍 글자 크기: 기본</button>
         <button class="util-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 다크</button>
       </nav>
@@ -184,7 +184,7 @@
         <span>일일 1회 사이트 외관 자동 발전 · 일일 2회 가상 OS 테스트 포스팅 · 저녁 수동 노트</span>
       </div>
       <div>
-        <a href="{{ site.baseurl }}/status.html" style="font-weight:800; color:var(--argon-primary);">🔎 시스템 구조 및 검증 로그 확인하기 &rarr;</a>
+        <a href="{{ '/' | relative_url }}status.html" style="font-weight:800; color:var(--argon-primary);">🔎 시스템 구조 및 검증 로그 확인하기 &rarr;</a>
       </div>
     </div>
   </footer>

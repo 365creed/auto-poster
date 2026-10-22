@@ -1,6 +1,6 @@
 [
   {
-    "evolved_at": "2026-10-22 14:35:06 KST",
+    "evolved_at": "2026-10-22 14:36:26 KST",
     "version": "Argon v2.2",
     "feature_id": "beginner_glossary_cards",
     "title": "외계어 같은 컴퓨터 용어를 즉시 번역해 주는 'Argon 왕초보 1초 용어 사전' 위젯 진화",
@@ -14,7 +14,7 @@
     "verifier": "GPT Think UI/DOM Verifier (PASS · Zero Layout Breakage)"
   },
   {
-    "evolved_at": "2026-10-22 14:35:06 KST",
+    "evolved_at": "2026-10-22 14:36:26 KST",
     "version": "Argon v2.1",
     "feature_id": "font_magnifier_widget",
     "title": "어르신·컴맹을 위한 '글자 크기 3단계 돋보기(100% / 115% / 130%)' 상단 바 탑재",
