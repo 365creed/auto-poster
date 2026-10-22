@@ -1,30 +1,30 @@
 {
-  "timestamp": "2026-10-22T06:43:44.016070",
-  "scene_type": "desktop_windows",
-  "lesson_title": "데스크톱 바탕화면의 아이콘 배율 조절과 격자(Grid) 자동 정렬 메커니즘",
+  "timestamp": "2026-10-22T08:12:12.158319",
+  "scene_type": "history_simulator",
+  "lesson_title": "진공관 계산기에서 모바일 노트북까지: 0과 1의 전기 신호가 데이터를 처리하는 근원적 원리",
   "resolution": "1280x800",
   "virtual_display_status": "PASS",
   "screenshots": [
     {
       "step": 1,
-      "path": "assets/images/2026-10-22/os_step1_20261022_154343.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step1_20261022_154343.png",
+      "path": "assets/images/2026-10-22/os_step1_20261022_171211.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step1_20261022_171211.png",
       "caption": "1단계: 데스크톱 화면에서 실행할 대상 아이콘과 메뉴 위치를 확인합니다.",
-      "size_bytes": 80070
+      "size_bytes": 71350
     },
     {
       "step": 2,
-      "path": "assets/images/2026-10-22/os_step2_20261022_154343.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step2_20261022_154343.png",
+      "path": "assets/images/2026-10-22/os_step2_20261022_171211.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step2_20261022_171211.png",
       "caption": "2단계: 마우스 좌클릭(선택)과 우클릭(컨텍스트 메뉴 호출) 동작을 수행합니다.",
-      "size_bytes": 82020
+      "size_bytes": 73369
     },
     {
       "step": 3,
-      "path": "assets/images/2026-10-22/os_step3_20261022_154343.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step3_20261022_154343.png",
+      "path": "assets/images/2026-10-22/os_step3_20261022_171211.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step3_20261022_171211.png",
       "caption": "3단계: 입력 이벤트가 정상적으로 처리되어 실행된 결과 창을 확인합니다.",
-      "size_bytes": 82959
+      "size_bytes": 74447
     }
   ]
 }

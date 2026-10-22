@@ -1,5 +1,14 @@
 [
   {
+    "verified_at": "2026-10-22 17:12:12 KST",
+    "target_file": "_posts/2026-10-22-lab-05-from-eniac-to-laptop-20261022_171211.md",
+    "lesson_title": "진공관 계산기에서 모바일 노트북까지: 0과 1의 전기 신호가 데이터를 처리하는 근원적 원리",
+    "os_scene": "history_simulator",
+    "verdict": "APPROVED",
+    "score": 100,
+    "notes": "1280x800 캡처 3장 및 본문 구조 내부 검증 통과 (외부 비노출)"
+  },
+  {
     "verified_at": "2026-10-22 15:43:44 KST",
     "target_file": "_posts/2026-10-22-lab-04-desktop-view-and-scaling-20261022_154343.md",
     "lesson_title": "데스크톱 바탕화면의 아이콘 배율 조절과 격자(Grid) 자동 정렬 메커니즘",
