@@ -1,20 +1,6 @@
 [
   {
-    "evolved_at": "2026-10-22 14:36:26 KST",
-    "version": "Argon v2.2",
-    "feature_id": "beginner_glossary_cards",
-    "title": "외계어 같은 컴퓨터 용어를 즉시 번역해 주는 'Argon 왕초보 1초 용어 사전' 위젯 진화",
-    "component_target": "index.md & _layouts/post.html",
-    "argon_tokens": [
-      "#11cdef (Argon Info Cyan)",
-      "#f4f5f7 (Argon Secondary Surface)"
-    ],
-    "summary": "클릭, 더블클릭, 운영체제(OS), 호스트네임(PC 이름), 확장자 같은 단어를 일상 언어로 바로 풀어주는 Argon 스타일 용어 카드를 활성화했습니다.",
-    "producer": "Gemini UI Architect (Argon Only Mode)",
-    "verifier": "GPT Think UI/DOM Verifier (PASS · Zero Layout Breakage)"
-  },
-  {
-    "evolved_at": "2026-10-22 14:36:26 KST",
+    "evolved_at": "2026-10-22 15:43:38 KST",
     "version": "Argon v2.1",
     "feature_id": "font_magnifier_widget",
     "title": "어르신·컴맹을 위한 '글자 크기 3단계 돋보기(100% / 115% / 130%)' 상단 바 탑재",

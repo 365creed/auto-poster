@@ -1,10 +1,10 @@
 {
-  "name": "ChooSu Note — 친절한 컴퓨터 기초 학교 & 가상 OS 실험실",
-  "short_name": "ChooSu 컴퓨터학교",
+  "name": "ChooSu Lab — 컴퓨팅 아카이브 & 디지털 연구실",
+  "short_name": "ChooSu Lab",
   "start_url": "/choosu-lab/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
+  "background_color": "#f4f5f7",
+  "theme_color": "#4f46e5",
   "icons": [
     {
       "src": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=192&h=192&fit=crop",

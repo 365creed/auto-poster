@@ -1,9 +1,8 @@
-title: "ChooSu Note | 세상에서 가장 친절한 컴퓨터 기초 학교"
-description: "컴퓨터와 노트북의 역사부터 '자, 이게 클릭이야!'까지 — 가상화 OS 환경에서 AI가 직접 조작하고 게임을 플레이하며 캡처한 화면으로 배우는 초보자 눈높이 기초 교실"
+title: "ChooSu Lab | 컴퓨팅 아카이브 & 디지털 리터러시 연구실"
+description: "하드웨어의 역사부터 운영체제(OS) 구조와 기본 환경 설정까지, 컴퓨터의 근원적 원리와 실전 조작을 기록하는 아카이브"
 url: "https://365creed.github.io"
 baseurl: "/choosu-lab"
 future: true
-permalink: /posts/:title/
 markdown: kramdown
 timezone: Asia/Seoul
 plugins:

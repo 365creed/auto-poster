@@ -1,4 +1,4 @@
-lesson-01-rename-pc
-lesson-02-what-is-click
-lesson-03-minesweeper-ai-play
-manual-20261022_143632
+lab-01-system-hostname
+lab-02-mouse-cursor-interaction
+lab-03-minesweeper-gui-history
+lab-04-desktop-view-and-scaling

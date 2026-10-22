@@ -12,7 +12,7 @@
 
 ## 🌙 저녁 수동 포스팅 올리는 3가지 방법
 
-1. **블로그 내 웹 스튜디오 (`/choosu-lab/studio.html`) 활용**
+1. **블로그 내 웹 스튜디오 (`/auto-poster/studio.html`) 활용**
    - 블로그 우측 상단 **[🌙 저녁 수동 포스팅 스튜디오]** 버튼을 눌러 제목·본문을 작성한 뒤 마크다운(`.md`) 파일을 다운로드하여 `_posts/`에 추가합니다.
 2. **GitHub Actions 웹 수동 실행 (`workflow_dispatch`)**
    - GitHub 저장소의 **Actions** 탭 &rarr; `ChooSu Computer School — Hybrid Auto & Manual Publisher` &rarr; **Run workflow** 클릭 후 제목, 주제, 직접 쓴 본문, 가상 OS 캡처 모드를 선택해 실행하면 가상 OS 스크린샷이 자동 첨부되어 발행됩니다.

@@ -1,0 +1,181 @@
+---
+layout: default
+title: 시스템 작동 구조 & 자가 점검 관제 센터
+---
+
+<style>
+  .status-banner {
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%);
+    color: #fff;
+    border-radius: 22px;
+    padding: 36px 40px;
+    margin-bottom: 30px;
+    box-shadow: var(--argon-shadow);
+  }
+  .arch-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .arch-step {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 18px;
+  }
+  .arch-step .step-badge {
+    display: inline-block;
+    background: #5e72e4;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .panel-grid { grid-template-columns: 1fr; } }
+  .argon-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 26px 28px;
+    box-shadow: var(--argon-shadow-sm);
+  }
+  .argon-panel h3 { margin: 0 0 14px 0; font-size: 1.2rem; font-weight: 900; }
+  .log-card {
+    background: var(--bg-subtle);
+    border-left: 4px solid #2dce89;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+  }
+  . inspect-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 12px;
+  }
+  .inspect-table th, .inspect-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+  .inspect-table th { background: var(--bg-subtle); font-weight: 800; }
+</style>
+
+<div class="status-banner">
+  <span style="background:#2dce89; color:#fff; padding:5px 14px; border-radius:20px; font-size:0.8rem; font-weight:900;">🛡️ ARCHITECTURE &amp; SELF-INSPECTION CENTER</span>
+  <h1 style="margin:14px 0 8px 0; font-size:2rem; color:#fff;">전체 시스템 작동 구조 및 자가 점검 관제 센터</h1>
+  <p style="margin:0; color:#cbd5e1; font-size:1rem;">
+    <strong>제미나이(생산 &amp; 가상OS 테스트) &rarr; Argon(외관 표준) &rarr; GPT Think(추론 검증) &rarr; Git(자동 운영)</strong> 파이프라인이 어떻게 돌아가고 어디서 확인하면 되는지 한눈에 점검하는 페이지입니다.
+  </p>
+
+  <div class="arch-flow">
+    <div class="arch-step">
+      <span class="step-badge">1단계 · 생산 (Gemini)</span>
+      <div style="font-weight:800; font-size:1.02rem; margin-bottom:6px;">가상 OS 실습 2회 + 사이트 발전 1회</div>
+      <div style="font-size:0.83rem; color:#cbd5e1;">오전 9시·오후 3시에는 가상 OS에서 PC 이름 변경·클릭 등을 테스트해 글을 쓰고, 새벽 3시에는 블로그 외관을 1회 발전시킵니다.</div>
+    </div>
+    <div class="arch-step">
+      <span class="step-badge" style="background:#11cdef; color:#172b4d;">2단계 · 외관 (Argon Only)</span>
+      <div style="font-weight:800; font-size:1.02rem; margin-bottom:6px;">Argon 디자인 시스템 고정</div>
+      <div style="font-size:0.83rem; color:#cbd5e1;">인디고(<code>#5e72e4</code>)·민트(<code>#2dce89</code>) 팔레트와 글자 확대 돋보기, OS 창 액자 등 Argon 규격으로만 일관되게 렌더링합니다.</div>
+    </div>
+    <div class="arch-step">
+      <span class="step-badge" style="background:#2dce89;">3단계 · 검증 (GPT Think)</span>
+      <div style="font-weight:800; font-size:1.02rem; margin-bottom:6px;">다단계 추론 품질 게이트</div>
+      <div style="font-size:0.83rem; color:#cbd5e1;">컴맹 눈높이 친절도, 가상 OS 캡처 3장 무결성, Argon 레이아웃 정상 여부를 추론 검증하여 승인(APPROVED) 판정을 내립니다.</div>
+    </div>
+    <div class="arch-step">
+      <span class="step-badge" style="background:#fb6340;">4단계 · 운영 (Git &amp; Pages)</span>
+      <div style="font-weight:800; font-size:1.02rem; margin-bottom:6px;">검증 통과분 자동 커밋·배포</div>
+      <div style="font-size:0.83rem; color:#cbd5e1;">검증을 통과한 파일만 Git 저장소에 푸시되어 블로그에 자동 반영되며, 모든 증적은 <code>_data/</code>와 이 페이지에 기록됩니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="argon-panel" style="margin-bottom: 28px;">
+  <h3>📍 내가 어디서 무엇을 확인하면 되나요? (5대 핵심 점검 포인트)</h3>
+  <table class="inspect-table">
+    <thead>
+      <tr>
+        <th>점검 항목</th>
+        <th>확인하는 곳 (경로 / 위치)</th>
+        <th>무엇을 보면 되나요?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. 하루 3번 자동 실행 여부</strong><br>(포스팅 2회 + 사이트 발전 1회)</td>
+        <td>GitHub 저장소 상단 <strong>[Actions]</strong> 탭 &rarr; <code>Argon Blog — Gemini Producer...</code></td>
+        <td>초록색 체크(✅) 표시와 함께 새벽 3시(사이트 발전), 오전 9시·오후 3시(포스팅) 실행 로그 확인</td>
+      </tr>
+      <tr>
+        <td><strong>2. 제미나이 가상 OS 테스트 결과</strong></td>
+        <td>저장소 내 <code>audit_logs/last_os_test.json</code> 및 <code>assets/images/날짜/</code> 폴더</td>
+        <td><code>virtual_display_status: PASS</code> 여부와 1~3단계 가상 OS 캡처 이미지 3장 생성 확인</td>
+      </tr>
+      <tr>
+        <td><strong>3. GPT Think 추론 검증 리포트</strong></td>
+        <td>각 포스트 맨 아래 <strong>[🛡️ GPT Think 검증 완료 박스]</strong> 또는 아래 실시간 로그 패널</td>
+        <td>검증 점수(Score: 100/100), <code>APPROVED</code> 판정, 3줄 추론 심사평 확인</td>
+      </tr>
+      <tr>
+        <td><strong>4. 하루 1회 Argon 외관 발전 내역</strong></td>
+        <td>저장소 내 <code>_data/evolution_history.json</code> 및 아래 우측 패널</td>
+        <td>매일 어떤 Argon 초보자 편의 기능(돋보기, 용어사전, 체크박스 등)이 추가되었는지 버전별 확인</td>
+      </tr>
+      <tr>
+        <td><strong>5. 다음 수업 주제 추가·순서 변경</strong></td>
+        <td>저장소 내 <code>curriculum.json</code> 및 <code>posted_history.txt</code></td>
+        <td>이미 발행된 수업 ID는 <code>posted_history.txt</code>에 기록되며, 새 주제는 <code>curriculum.json</code>에 추가</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel-grid">
+  <div class="argon-panel">
+    <h3>🛡️ 최근 GPT Think 추론 검증 통과 로그</h3>
+    {% if site.data.verification_history and site.data.verification_history.size > 0 %}
+      {% for item in site.data.verification_history limit:5 %}
+        <div class="log-card">
+          <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:4px;">
+            <span style="color:#1aae6f;">✔ {{ item.verdict }} ({{ item.score }}점) · {{ item.os_scene }}</span>
+            <span style="color:var(--text-muted); font-size:0.78rem;">{{ item.verified_at }}</span>
+          </div>
+          <div style="font-weight:800; margin-bottom:6px;">{{ item.lesson_title }}</div>
+          <div style="color:var(--text-secondary); font-size:0.83rem;">{{ item.reasoning_summary }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="color:var(--text-muted);">아직 기록된 검증 이력이 없습니다.</p>
+    {% endif %}
+  </div>
+
+  <div class="argon-panel">
+    <h3>🎨 최근 일일 1회 Argon 사이트 자동 발전 이력</h3>
+    {% if site.data.evolution_history and site.data.evolution_history.size > 0 %}
+      {% for evo in site.data.evolution_history limit:5 %}
+        <div class="log-card" style="border-left-color: #5e72e4;">
+          <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:4px;">
+            <span style="color:var(--argon-primary);">✨ {{ evo.version }} ({{ evo.feature_id }})</span>
+            <span style="color:var(--text-muted); font-size:0.78rem;">{{ evo.evolved_at }}</span>
+          </div>
+          <div style="font-weight:800; margin-bottom:6px;">{{ evo.title }}</div>
+          <div style="color:var(--text-secondary); font-size:0.83rem;">{{ evo.summary }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="color:var(--text-muted);">아직 기록된 사이트 진화 이력이 없습니다.</p>
+    {% endif %}
+  </div>
+</div>

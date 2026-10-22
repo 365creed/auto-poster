@@ -1,31 +1,30 @@
 {
-  "timestamp": "2026-10-22T05:36:32.492764",
-  "producer": "Gemini Virtual OS Sandbox Agent",
+  "timestamp": "2026-10-22T06:43:44.016070",
   "scene_type": "desktop_windows",
-  "lesson_title": "바탕화면 아이콘이 너무 작아서 안 보일 때! 3초 만에 큼지막하게 키우는 법",
+  "lesson_title": "데스크톱 바탕화면의 아이콘 배율 조절과 격자(Grid) 자동 정렬 메커니즘",
   "resolution": "1280x800",
-  "virtual_display_status": "PASS (3/3 Steps Executed & Captured)",
+  "virtual_display_status": "PASS",
   "screenshots": [
     {
       "step": 1,
-      "path": "assets/images/2026-10-22/os_step1_20261022_143632.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step1_20261022_143632.png",
-      "caption": "1단계: 가상 OS 바탕화면에서 오늘 배울 아이콘과 프로그램 위치를 먼저 눈으로 확인해요.",
-      "size_bytes": 90218
+      "path": "assets/images/2026-10-22/os_step1_20261022_154343.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step1_20261022_154343.png",
+      "caption": "1단계: 데스크톱 화면에서 실행할 대상 아이콘과 메뉴 위치를 확인합니다.",
+      "size_bytes": 80070
     },
     {
       "step": 2,
-      "path": "assets/images/2026-10-22/os_step2_20261022_143632.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step2_20261022_143632.png",
-      "caption": "2단계: 제미나이가 직접 마우스를 움직여 클릭(딸깍!)하거나 미니게임을 조작하는 순간이에요.",
-      "size_bytes": 91638
+      "path": "assets/images/2026-10-22/os_step2_20261022_154343.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step2_20261022_154343.png",
+      "caption": "2단계: 마우스 좌클릭(선택)과 우클릭(컨텍스트 메뉴 호출) 동작을 수행합니다.",
+      "size_bytes": 82020
     },
     {
       "step": 3,
-      "path": "assets/images/2026-10-22/os_step3_20261022_143632.png",
-      "url": "/choosu-lab/assets/images/2026-10-22/os_step3_20261022_143632.png",
-      "caption": "3단계: 클릭과 조작이 성공적으로 반영되어 창이 열리고 실습 목표를 달성한 화면이에요!",
-      "size_bytes": 91677
+      "path": "assets/images/2026-10-22/os_step3_20261022_154343.png",
+      "url": "/choosu-lab/assets/images/2026-10-22/os_step3_20261022_154343.png",
+      "caption": "3단계: 입력 이벤트가 정상적으로 처리되어 실행된 결과 창을 확인합니다.",
+      "size_bytes": 82959
     }
   ]
 }

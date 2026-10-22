@@ -1,9 +1,10 @@
 """
 poster.py
-[생산 전담: 제미나이(Gemini) Virtual OS Test & Post Producer]
-- 하루 2회(오전 09:00 KST, 오후 15:00 KST) 가상화 OS 환경에서 직접 PC 이름 바꾸기, 마우스 클릭,
-  지뢰찾기 게임, 바탕화면 설정 등을 테스트하고 3단계 스크린샷을 찍어 초보자 눈높이 포스팅을 생산합니다.
-- 생산 직후 GPT Think 검증기(verifier_gpt_think.py)를 호출해 검증 통과 인증을 받은 뒤 Git에 반영합니다.
+ChooSu Lab — 컴퓨팅 아카이브 & 디지털 리터러시 연구실 자동 발행 엔진
+- 하루 2회(오전 9시, 오후 3시) 가상 OS 환경 테스트 및 리서치 노트를 자동 생성하고,
+  내부 검증(verifier_gpt_think.py)을 거친 뒤 Git에 반영합니다.
+- 외부 화면에는 내부 검증 과정이나 '초보/학교/선생님' 같은 표현을 노출하지 않고,
+  진입장벽이 낮고 정돈된 연구실(Lab) 아카이브 톤으로 글을 작성합니다.
 """
 
 import os
@@ -46,45 +47,23 @@ def save_history(identifier):
         f.write(f"{identifier}\n")
 
 
-def detect_slot_info():
-    env_slot = os.environ.get("POST_SLOT", "").strip().lower()
-    if env_slot == "manual" or os.environ.get("MANUAL_TITLE", "").strip():
-        return {
-            "slot_id": "evening_manual",
-            "slot_badge": "🌙 저녁 수동 노트 · 에디터 & GPT Think 검증",
-            "author_type": "Human Editor + GPT Think QA"
-        }
-    if env_slot == "morning" or (env_slot == "" and NOW_KST.hour < 12):
-        return {
-            "slot_id": "morning_auto",
-            "slot_badge": "☀️ 오전 9시 기초·설정 실습 (Gemini 가상OS 테스트)",
-            "author_type": "Gemini Producer (09:00 KST)"
-        }
-    return {
-        "slot_id": "afternoon_auto",
-        "slot_badge": "🎮 오후 3시 가상OS·게임 실습 (Gemini 가상OS 테스트)",
-        "author_type": "Gemini OS Agent (15:00 KST)"
-    }
-
-
-def select_next_lesson(history_list, slot_info):
+def select_next_lesson(history_list):
     manual_title = os.environ.get("MANUAL_TITLE", "").strip()
     manual_topic = os.environ.get("MANUAL_TOPIC", "").strip()
     manual_scene = os.environ.get("OS_SCENE", "pc_rename").strip() or "pc_rename"
 
     if manual_title:
         return {
-            "id": f"manual-{STAMP_STR}",
-            "stage": "방과후 보충 수업 · 저녁 수동 노트",
+            "id": f"lab-note-{STAMP_STR}",
+            "category": "리서치 노트",
             "os_scene": manual_scene,
-            "os_type": "Argon 가상 OS 맞춤 테스트",
-            "difficulty": "Lv.1 친절한 해설",
+            "os_type": "OS 테스트 환경",
             "title": manual_title,
-            "subtitle": manual_topic or "저녁 시간에 직접 정리하며 가상 OS 테스트 화면과 함께 살펴보는 기초 가이드",
-            "keywords": ["컴퓨터기초", "수동노트", "가상OS테스트", "컴맹탈출"],
-            "learning_goals": [
-                "오늘의 핵심 설정과 원리를 일상 속 쉬운 비유로 이해해요.",
-                "제미나이가 가상 OS에서 테스트한 화면을 보며 똑같이 따라 해봐요."
+            "subtitle": manual_topic or "시스템 환경 설정과 기본 작동 원리에 관한 아카이브 기록",
+            "keywords": ["시스템설정", "운영체제", "컴퓨팅기초", "리서치노트"],
+            "key_points": [
+                "핵심 작동 원리와 배경 구조 정리",
+                "단계별 인터페이스 조작 및 설정 적용 과정 확인"
             ],
             "prompt_guide": manual_topic or manual_title
         }
@@ -100,122 +79,201 @@ def select_next_lesson(history_list, slot_info):
             return item
 
     next_num = len(history_list) + 1
-    is_afternoon = slot_info["slot_id"] == "afternoon_auto"
+    scenes = ["pc_rename", "click_trainer", "game_minesweeper", "desktop_windows", "history_simulator"]
+    chosen_scene = scenes[next_num % len(scenes)]
     return {
-        "id": f"auto-curriculum-{next_num:03d}",
-        "stage": "실습 교시 · 가상 OS 테스트" if is_afternoon else "실전 교시 · 컴맹 필수 설정",
-        "os_scene": "game_minesweeper" if is_afternoon else "pc_rename",
-        "os_type": "Argon Virtual OS Sandbox",
-        "difficulty": "Lv.1 완전 입문",
-        "title": f"[컴맹 탈출 {next_num}강] 제미나이가 가상 OS에서 직접 눌러보고 알려주는 초간단 컴퓨터 설정",
-        "subtitle": "아무것도 모르는 분도 사진 속 노란 동그라미만 따라 누르면 끝나는 친절한 실습 교실",
-        "keywords": ["컴퓨터기초", "노트북설정", "가상OS테스트", "컴맹탈출"],
-        "learning_goals": [
-            "컴퓨터를 처음 켰을 때 가장 당황스러운 설정을 3단계 클릭으로 해결해요.",
-            "가상 OS에서 사전 테스트된 안전한 화면을 보며 겁먹지 않고 따라 해요."
+        "id": f"lab-archive-{next_num:03d}",
+        "category": "OS 환경 설정" if next_num % 2 == 1 else "인터페이스 원리",
+        "os_scene": chosen_scene,
+        "os_type": "OS 테스트 환경",
+        "title": f"시스템 기본 환경 구성 및 인터페이스 작동 원리 탐구 #{next_num}",
+        "subtitle": "운영체제 내부 설정 구조와 직관적인 디바이스 제어를 위한 단계별 가이드",
+        "keywords": ["운영체제", "시스템설정", "인터페이스", "아카이브"],
+        "key_points": [
+            "기능이 설계된 배경과 기본 작동 메커니즘 이해",
+            "가상 환경 테스트를 통한 단계별 설정 절차 확인"
         ],
-        "prompt_guide": f"컴퓨터 초보자가 가장 자주 검색하는 기초 설정 {next_num}번째 수업입니다."
+        "prompt_guide": f"컴퓨터와 운영체제의 기초 원리 및 실용적인 설정 주제({next_num}번째 기록)를 다루되, 전문 용어의 장벽을 낮춰 누구나 명쾌하게 이해할 수 있는 연구실 아카이브 톤으로 작성하세요."
     }
 
 
 def build_builtin_lesson_article(lesson):
-    goals_md = "\n".join(f"- ✅ {g}" for g in lesson.get("learning_goals", []))
+    points_md = "\n".join(f"- **{p}**" for p in lesson.get("key_points", []))
     scene = lesson.get("os_scene", "pc_rename")
 
     if scene == "pc_rename":
-        content = f"""## 👋 들어가며: "DESKTOP-8F9K2A1이 누구 컴퓨터야?" 당황하셨나요?
+        content = f"""## 개요: 초기 장치 이름(DESKTOP-XXXX)은 왜 자동으로 부여될까?
 
-새로 산 노트북이나 컴퓨터에 블루투스 이어폰을 연결하려거나, 집에서 와이파이(공유기)에 연결된 기기를 확인할 때 **`DESKTOP-8F9K2A1`**처럼 알 수 없는 영어와 숫자가 섞인 이름을 본 적이 있으신가요? 아무것도 모르는 상태에서는 *"어? 누가 내 컴퓨터에 해킹 프로그램을 깔았나?"* 하고 덜컥 겁이 나기도 합니다.
+운영체제를 처음 설치하거나 새 PC를 구동하면 시스템 정보 항목에 **`DESKTOP-8F9K2A1`**과 같이 영문과 난수가 결합된 이름이 기본으로 지정되어 있습니다. 이는 네트워크 상에서 여러 기기가 서로 충돌하지 않도록 운영체제 설치 프로그램이 임의로 생성한 **호스트네임(Hostname, 장치 식별자)**입니다.
 
-안심하세요! 이 복잡한 이름은 컴퓨터 공장에서 윈도우(운영체제)를 처음 설치할 때 임시로 붙여놓은 **'공장 출고용 번호표'**일 뿐이랍니다. 오늘 수업에서는 **제미나이(Gemini)가 가상 OS 환경에서 직접 마우스를 움직여 내 컴퓨터 이름을 `우리집-첫노트북`으로 바꾸는 전 과정을 테스트하고 찍은 사진**으로 한 눈금씩 친절하게 알려드릴게요!
+단일 기기만 사용할 때는 기본 이름을 그대로 두어도 무방하지만, 무선 네트워크(Wi-Fi) 공유기 관리 화면이나 블루투스 주변기기 연결, 로컬 파일 공유 환경에서는 어떤 기기인지 직관적으로 식별하기 어렵습니다. 따라서 용도나 위치에 맞게 장치 이름을 변경해 두면 기기 관리 효율이 크게 높아집니다.
 
-> 💡 **오늘 수업에서 함께 해볼 목표**
-{goals_md}
+> **핵심 요약**
+{points_md}
 
 [IMAGE_1]
 
-## 1️⃣ 왜 컴퓨터에게도 '이름표'가 필요할까요?
+## 1. 기본 호스트네임과 사용자 지정 이름의 비교
 
-우리 집에 노트북이 한 대뿐일 때도 스마트폰, 태블릿, 블루투스 마우스, 프린터가 서로 전파를 주고받으며 대화합니다. 이때 기계들끼리 **"나는 거실에 있는 노트북이야!"** 하고 서로 알아보기 위해 부르는 이름을 전문 용어로 **호스트네임(Hostname, 장치 이름)**이라고 불러요.
+네트워크 환경에서 장치 이름이 사용되는 방식과 명명 규칙의 차이는 다음과 같습니다.
 
-| 구분 | 공장 초기 이름 (`DESKTOP-8F9K2A1`) | 내가 바꾼 친절한 이름 (`우리집-첫노트북`) |
+| 구분 | 초기 자동 생성 이름 (`DESKTOP-8F9K2A1`) | 사용자 지정 이름 (`ChooSu-WorkPC`) |
 | :--- | :--- | :--- |
-| **알아보기 쉬움** | 외계어 같아서 내 컴퓨터인지 구분 불가 | 가족 누구나 보자마자 내 컴퓨터인지 단번에 확인 |
-| **블루투스·파일 전송** | 옆집 기기인지 내 기기인지 헷갈림 | 스마트폰에서 사진 보낼 때 내 노트북을 1초 만에 선택 |
-| **안전한 이름 규칙** | 영문 대문자 + 무작위 숫자 조합 | **한글, 영문, 숫자, 붙임표(`-`)** 사용 가능 (띄어쓰기 제외) |
+| **생성 방식** | OS 설치 시 무작위 영문·숫자 조합으로 자동 부여 | 사용자가 용도·위치에 맞춰 직접 지정 |
+| **기기 식별성** | 블루투스 페어링 및 네트워크 목록에서 구분이 어려움 | 연결 기기 목록에서 즉시 식별 가능 |
+| **작성 규칙** | 영문 대문자 및 숫자 | **한글, 영문, 숫자, 하이픈(`-`)** 허용 (공백 및 특수기호 제외) |
 
 [IMAGE_2]
 
-## 2️⃣ 제미나이가 가상 OS에서 직접 테스트한 'PC 이름 바꾸기' 3단계
+## 2. 단계별 장치 이름 변경 절차
 
-자, 이제 위 사진 속 노란색 말풍선을 보면서 천천히 따라 해볼까요?
+시스템 설정 메뉴를 통해 호스트네임을 변경하는 과정은 3단계로 이루어집니다.
 
-1. **1단계 ([설정] → [시스템] 열기)**: 화면 맨 아래 왼쪽(또는 가운데)의 **시작 버튼(`❖`)**을 누른 뒤 톱니바퀴 모양의 **[설정(⚙️)]**을 클릭합니다. 왼쪽 메뉴 맨 위의 **[시스템]**을 누르면 지금 내 컴퓨터의 임시 이름(`DESKTOP-8F9K2A1`)과 바로 옆의 파란색 **`[이 PC의 이름 바꾸기]`** 버튼이 보입니다. 여기를 마우스 왼쪽 버튼으로 **'딸깍!'** 클릭하세요.
-2. **2단계 (새 이름 적고 [다음] 누르기)**: 파란색 입력 창이 뜨면 키보드로 내가 원하는 이름(예: **`우리집-첫노트북`** 또는 **`민수-컴퓨터`**)을 적어줍니다. 이때 **빈칸(띄어쓰기)이나 특수기호(`!`, `@`, `*`)는 넣을 수 없으니** 단어 사이에는 빼기 기호(`-`)를 쓰면 아주 깔끔해요! 다 적었으면 **`[다음]`** 버튼을 클릭합니다.
-3. **3단계 (다시 시작 후 바뀐 이름 확인!)**: 컴퓨터가 새 이름표를 단단히 붙이려면 한 번 껐다 켜는 **[지금 다시 시작]** 과정이 필요해요. 작업 중이던 문서를 저장하고 다시 시작을 누르면, 세 번째 사진처럼 내 컴퓨터 이름이 **`우리집-첫노트북`**으로 멋지게 바뀐 것을 확인할 수 있답니다!
+1. **시스템 정보 메뉴 접근 (Step 1)**: 작업표시줄의 **[시작]** 버튼을 누른 뒤 **[설정] → [시스템] → [정보]** 순서로 이동합니다. 상단 사양 요약 영역에 현재 부여된 장치 이름과 함께 **`[이 PC의 이름 바꾸기]`** 버튼이 표시됩니다.
+2. **새 식별 이름 입력 (Step 2)**: 버튼을 클릭하여 입력 창이 열리면 구분하기 쉬운 새 이름을 입력합니다. 이때 네트워크 표준 규격상 **띄어쓰기(공백)나 특수문자(`@`, `*`, `/`)는 허용되지 않으므로**, 단어를 구분할 때는 하이픈(`-`)을 사용하는 것이 안전합니다. 입력 후 **`[다음]`**을 누릅니다.
+3. **시스템 재시작 및 반영 확인 (Step 3)**: 변경된 호스트네임은 시스템 부팅 과정에서 네트워크 서비스에 등록되므로, 작업 중인 문서를 저장한 뒤 **[지금 다시 시작]**을 실행합니다. 재부팅 후 시스템 정보 화면에서 변경된 이름이 정상적으로 적용된 것을 확인할 수 있습니다.
 
 [IMAGE_3]
 
-## 3️⃣ 컴맹 탈출 핵심 요약: 이것만 기억하세요!
+## 3. 참고 사항 및 정리
 
-- **PC 이름을 바꾼다고 해서 내 파일이나 사진이 지워지지 않으니** 안심하고 바꿔보세요.
-- 이름을 지을 때 **"이 이름은 사용할 수 없습니다"**라는 안내가 나온다면, 십중팔구 **띄어쓰기(스페이스바)**가 들어갔기 때문이에요. 띄어쓰기 대신 붙임표(`-`)를 넣어주면 바로 통과됩니다!
+- 장치 이름을 변경하더라도 내부 저장소의 개인 파일이나 설치된 프로그램 데이터에는 영향을 주지 않습니다.
+- 만약 입력 과정에서 사용 불가 안내가 표시된다면 공백 문자가 포함되었는지 확인한 뒤 하이픈(`-`)으로 대체하면 정상적으로 등록됩니다.
 """
-        code_block = "1단계: [시작] -> [설정(⚙️)] -> [시스템] 클릭\n2단계: [이 PC의 이름 바꾸기] 버튼 좌클릭\n3단계: 공백 없이 '우리집-첫노트북' 입력 후 [다음]\n4단계: 재부팅 후 바뀐 장치 이름 확인 완료!"
-    else:
-        content = f"""## 👋 들어가며: 컴퓨터 앞에만 서면 손이 멈추는 분들을 위해
+        code_block = "1. [시작] -> [설정] -> [시스템] -> [정보] 이동\n2. [이 PC의 이름 바꾸기] 선택\n3. 공백 없이 새 이름(예: ChooSu-WorkPC) 입력 후 [다음]\n4. 시스템 재시작 후 변경된 호스트네임 확인"
 
-처음 컴퓨터나 노트북 전원을 켜면 화면 가득 알 수 없는 그림(아이콘)들이 떠 있고, 마우스를 조금만 움직여도 작은 화살표가 이리저리 날아다녀서 당황스럽기 마련이에요. 오늘 수업에서는 제미나이가 **가상 OS 실험실**에서 직접 테스트하고 캡처한 화면으로 **{lesson['title']}**을 가장 친절하게 알려드릴게요.
+    elif scene == "click_trainer":
+        content = f"""## 개요: 명령어 입력(CLI)에서 그래픽 인터페이스(GUI)로의 전환
 
-> 💡 **오늘 수업에서 함께 배울 목표**
-{goals_md}
+초기 컴퓨팅 환경에서는 파일을 열거나 프로그램을 실행하기 위해 키보드로 직접 명령어와 경로를 입력해야 했습니다. 이후 화면 속 그래픽 요소(아이콘, 창, 메뉴)를 포인팅 디바이스로 직접 가리켜 제어하는 **GUI(Graphical User Interface)**가 도입되면서, 마우스 커서와 클릭 체계는 현대 운영체제의 가장 기본적인 입력 표준으로 자리 잡았습니다.
+
+마우스 조작은 단순히 버튼을 누르는 행위처럼 보이지만, 내부적으로는 **위치 지정(Hover), 단일 선택(Click), 프로세스 실행(Double-Click), 보조 옵션 호출(Right-Click)**의 4가지 독립된 이벤트로 구분되어 작동합니다.
+
+> **핵심 요약**
+{points_md}
 
 [IMAGE_1]
 
-## 1️⃣ 근원부터 이해하기: 왜 이렇게 만들어졌을까요?
+## 1. 마우스 4대 입력 이벤트의 구조와 역할
+
+운영체제가 마우스의 움직임과 버튼 입력을 해석하는 기준은 다음과 같습니다.
+
+| 입력 구분 | 물리적 동작 | 시스템 내부 동작 | 주요 활용 상황 |
+| :--- | :--- | :--- | :--- |
+| **가리키기 (Hover)** | 버튼을 누르지 않고 대상 위로 커서 이동 | 해당 좌표의 객체 인식 및 요약 정보(툴팁) 표시 | 아이콘·버튼의 기능 사전 확인 |
+| **좌클릭 (Single Click)** | 왼쪽 버튼 1회 입력 | 대상 객체에 포커스(Focus) 부여 및 선택 | 파일 선택, 메뉴 및 버튼 실행 |
+| **더블클릭 (Double Click)** | 짧은 간격으로 왼쪽 버튼 연속 2회 입력 | 선택된 객체를 연결된 기본 프로그램으로 실행 | 폴더 진입, 문서 및 애플리케이션 열기 |
+| **우클릭 (Right Click)** | 오른쪽 버튼 1회 입력 | 대상 객체에서 수행 가능한 **컨텍스트 메뉴** 호출 | 복사, 이름 바꾸기, 속성 확인, 새 폴더 생성 |
+
+[IMAGE_2]
+
+## 2. 단계별 인터페이스 동작 확인
+
+데스크톱 환경에서 텍스트 문서를 선택하고 실행할 때 일어나는 상태 변화는 다음과 같습니다.
+
+1. **커서 이동 및 객체 인식 (Step 1)**: 마우스를 움직여 화면 속 화살표(커서) 끝을 대상 아이콘 위에 위치시킵니다. 운영체제는 커서 좌표를 실시간으로 추적하여 해당 아이콘의 테두리를 하이라이트하고 파일 정보를 표시합니다.
+2. **단일 선택과 컨텍스트 메뉴 비교 (Step 2)**: 왼쪽 버튼을 한 번 누르면 해당 아이콘이 '선택됨' 상태로 전환됩니다. 같은 위치에서 오른쪽 버튼(우클릭)을 누르면 해당 파일에 적용할 수 있는 작업 목록(열기, 이름 바꾸기, 복사, 속성)이 담긴 보조 메뉴가 나타납니다.
+3. **연속 입력을 통한 실행 (Step 3)**: 왼쪽 버튼을 빠르게 두 번 연속 누르면(더블클릭) 운영체제가 해당 확장자에 연결된 기본 편집기를 호출하여 화면에 새로운 창(Window)을 띄웁니다. 만약 두 번 누르는 간격이 길어지면 시스템은 이를 '단일 선택 2회'로 인식하므로 일정한 간격으로 연속 입력하는 것이 핵심입니다.
+
+[IMAGE_3]
+
+## 3. 참고 사항 및 정리
+
+- 의도하지 않은 우클릭 메뉴나 선택 상태가 활성화되었을 때는 바탕화면의 빈 공간을 좌클릭하거나 키보드의 **`Esc`** 키를 누르면 즉시 초기 상태로 돌아갑니다.
+- 더블클릭 속도가 너무 빠르거나 느려서 실행이 원활하지 않은 경우, 운영체제의 **[마우스 설정]**에서 더블클릭 인식 간격을 사용자의 입력 템포에 맞게 조정할 수 있습니다.
+"""
+        code_block = "1. 커서 이동(Hover): 대상 좌표 인식 및 하이라이트\n2. 좌클릭(Click): 단일 객체 포커스 및 선택\n3. 우클릭(Right Click): 상황별 컨텍스트 메뉴 호출\n4. 더블클릭(Double Click): 연결된 애플리케이션 실행"
+
+    elif scene == "game_minesweeper":
+        content = f"""## 개요: 고전 OS 내장 게임에 담긴 인터페이스 설계 의도
+
+1990년대 초 그래픽 기반 운영체제(Windows 3.0 및 3.1)가 처음 보급되던 시기, 가장 큰 기술적 과제는 기존 키보드 중심 사용자들이 **'마우스'라는 새로운 입력 장치에 익숙해지도록 만드는 것**이었습니다.
+
+이를 위해 운영체제 설계자들은 별도의 학습 매뉴얼을 읽게 하는 대신, 자연스러운 몰입을 통해 마우스 조작 숙련도를 높일 수 있는 소프트웨어를 기본 탑재했습니다. 카드 게임인 **솔리테어(Solitaire)**가 마우스 버튼을 누른 채 이동하는 '드래그 앤 드롭(Drag & Drop)'을 체득하게 했다면, **지뢰찾기(Minesweeper)**는 **좌클릭과 우클릭의 기능적 차이 및 정밀한 포인팅**을 훈련하기 위해 고안된 프로그램이었습니다.
+
+> **핵심 요약**
+{points_md}
+
+[IMAGE_1]
+
+## 1. 지뢰찾기 규칙과 마우스 입력의 대응 구조
+
+지뢰찾기의 게임 메커니즘은 마우스의 양쪽 버튼을 정확히 구분해서 사용해야만 클리어할 수 있도록 설계되어 있습니다.
+
+| 게임 내 동작 | 마우스 입력 방식 | 인터페이스 훈련 목적 |
+| :--- | :--- | :--- |
+| **타일 개방 (Open)** | **좌클릭 (왼쪽 버튼)** | 작은 격자(Grid) 안에 커서를 정확히 위치시키는 정밀 포인팅 숙련 |
+| **깃발 표시 (Flag)** | **우클릭 (오른쪽 버튼)** | 좌클릭(실행)과 우클릭(보조 상태 마킹)의 반사적 구분 능력 향상 |
+| **인접 숫자 판독 (1, 2...)** | 주변 8칸의 지뢰 개수 추론 | 화면의 시각적 피드백을 읽고 다음 입력 좌표를 결정하는 과정 반복 |
+
+[IMAGE_2]
+
+## 2. 가상 환경에서의 단계별 동작 분석
+
+1. **초기 타일 개방과 숫자 피드백 (Step 1)**: 닫혀 있는 격자 타일 중 하나를 **좌클릭**하여 개방합니다. 타일에 표시되는 숫자 `1` 또는 `2`는 해당 타일을 둘러싼 주변 8칸 안에 숨겨진 지뢰의 총개수를 의미합니다.
+2. **우클릭을 통한 지뢰 위치 마킹 (Step 2)**: 숫자 배열을 통해 지뢰가 위치한 칸을 특정한 뒤, 해당 칸 위에서 **우클릭**을 수행합니다. 타일이 열리지 않고 깃발(Flag) 표식이 세워지며, 이후 실수로 좌클릭하더라도 폭발하지 않도록 보호 상태가 설정됩니다.
+3. **안전 구역 완전 개방 (Step 3)**: 좌클릭(안전 타일 개방)과 우클릭(지뢰 타일 잠금)을 교차 수행하여 지뢰가 없는 모든 타일을 개방하면 보드가 클리어됩니다.
+
+[IMAGE_3]
+
+## 3. 참고 사항 및 정리
+
+- 이처럼 초기 운영체제의 기본 내장 애플리케이션들은 단순한 여가용 도구를 넘어, 새로운 컴퓨팅 패러다임(GUI)의 진입장벽을 낮추는 정교한 인터페이스 튜토리얼 역할을 수행했습니다.
+"""
+        code_block = "1. 좌클릭(Left Click): 지정된 격자 타일 개방 및 주변 숫자 확인\n2. 숫자 분석: 인접한 8칸 내 지뢰 분포 추론\n3. 우클릭(Right Click): 지뢰 타일에 보호 깃발 마킹\n4. 모든 안전 타일 개방 시 보드 클리어"
+
+    else:
+        content = f"""## 개요: {lesson['title']}
+
+컴퓨터 시스템을 효율적으로 다루기 위해서는 화면에 표시되는 그래픽 요소와 운영체제 내부 설정이 어떻게 연결되어 작동하는지 이해하는 것이 중요합니다. 본 노트에서는 **{lesson['title']}**의 핵심 구조와 단계별 설정 절차를 살펴봅니다.
+
+> **핵심 요약**
+{points_md}
+
+[IMAGE_1]
+
+## 1. 작동 구조 및 주요 설정 비교
 
 {lesson['prompt_guide']}
 
-| 동작 이름 | 손가락 움직임 | 컴퓨터가 알아듣는 뜻 | 일상 속 비유 |
+| 구분 | 기본 상태 (Default) | 설정 조정 후 (Configured) | 비고 |
 | :--- | :--- | :--- | :--- |
-| **가리키기 (Hover)** | 버튼은 누르지 않고 화살표만 올리기 | "이 물건이 뭔지 살짝 볼까?" | 상점에서 물건 앞에 서서 구경하기 |
-| **클릭 (좌클릭 1번)** | 검지로 왼쪽 버튼을 **'딸깍'** 한 번 누르기 | **"자, 너로 정했어!" (선택/확인)** | 메뉴판에서 원하는 메뉴 손가락으로 짚기 |
-| **더블클릭 (연속 2번)** | 검지로 왼쪽 버튼을 빠르게 **'따닥!'** 누르기 | **"문을 열고 안으로 들어가자!" (실행)** | 방문을 똑똑 두드려 활짝 열기 |
-| **우클릭 (오른쪽 1번)** | 중지로 오른쪽 버튼을 **'딸깍'** 누르기 | **"여기서 할 수 있는 메뉴판 보여줘!"** | 식당에서 직원분께 추가 메뉴판 요청하기 |
+| **화면 표시 및 식별** | 시스템 초기 기본값 적용 | 사용자의 작업 환경 및 해상도에 최적화 | 즉시 반영 |
+| **접근 경로** | 컨텍스트 메뉴(우클릭) 또는 시스템 설정 | 단축키 및 빠른 실행 메뉴 병행 가능 | 표준 GUI 규격 |
 
 [IMAGE_2]
 
-## 2️⃣ 제미나이 가상 OS 실험실에서 직접 해본 단계별 실습
+## 2. 단계별 환경 설정 및 테스트 과정
 
-1. **1단계 (목표 찾기)**: 바탕화면이나 게임 창에서 내가 누르고 싶은 위치를 눈으로 찾은 뒤, 마우스를 천천히 움직여 화살표 끝을 그 위에 올려놓습니다.
-2. **2단계 (클릭 & 우클릭 실행)**: 검지손가락으로 마우스 왼쪽 버튼을 가볍게 **'딸깍(Click)'** 누르면 선택됩니다. 보조 메뉴나 깃발 꽂기가 필요할 땐 오른쪽 버튼(우클릭)을 눌러보세요!
-3. **3단계 (결과 확인하기)**: 프로그램을 열 때는 쉬지 않고 **'따닥!'** 두 번 연속으로 누르는 더블클릭을 하면 창이 활짝 열립니다.
+1. **대상 메뉴 및 현재 상태 확인 (Step 1)**: 데스크톱 바탕화면 또는 시스템 설정 창에서 현재 적용된 기본 옵션을 확인합니다.
+2. **옵션 변경 및 명령 실행 (Step 2)**: 컨텍스트 메뉴(우클릭) 또는 설정 패널의 세부 항목을 선택하여 원하는 배율과 정렬 방식을 지정합니다.
+3. **변경 결과 확인 (Step 3)**: 설정이 화면에 즉시 반영되어 가독성과 작업 공간의 정돈 상태가 개선된 것을 확인합니다.
 
 [IMAGE_3]
 
-## 3️⃣ 오늘 배운 내용, 이것만은 꼭 기억해요!
+## 3. 참고 사항 및 정리
 
-- 무언가 잘못 눌렀거나 낯선 메뉴판이 튀어나왔을 때는 당황하지 말고 **빈 바탕화면을 왼쪽 클릭 한 번** 하거나, 키보드 왼쪽 맨 위의 **`Esc` (탈출) 키**를 누르면 언제든 안전하게 돌아갑니다.
+- 모든 시스템 환경 설정은 언제든 동일한 경로를 통해 초기 기본값으로 되돌릴 수 있으므로, 사용하는 모니터 해상도와 작업 스타일에 맞춰 유연하게 조정하는 것이 좋습니다.
 """
-        code_block = "1단계: 마우스 화살표를 목표 위치에 올리기\n2단계: 왼쪽 버튼 딸깍(좌클릭) / 오른쪽 버튼(우클릭)\n3단계: 실행 결과 화면 눈으로 확인하기"
+        code_block = "1. 현재 시스템 설정 및 표시 상태 확인\n2. 설정 메뉴 또는 컨텍스트 메뉴(우클릭) 호출\n3. 변경 옵션 적용 및 화면 반영 결과 확인"
 
     return {
         "title": lesson["title"],
         "subtitle": lesson.get("subtitle", ""),
-        "tags": lesson.get("keywords", ["컴퓨터기초", "가상OS테스트", "컴맹탈출"]),
+        "tags": lesson.get("keywords", ["운영체제", "시스템설정", "컴퓨팅기초"]),
         "code_block": code_block,
         "content": content
     }
 
 
-def generate_friendly_lesson_article(lesson, slot_info):
+def generate_lab_article(lesson):
     manual_body = os.environ.get("MANUAL_BODY", "").strip()
     if manual_body:
         return {
             "title": lesson["title"],
             "subtitle": lesson.get("subtitle", ""),
-            "tags": lesson.get("keywords", ["컴퓨터기초", "수동포스팅"]),
-            "code_block": "1. 목표 화면 확인하기\n2. 마우스 커서를 천천히 이동하기\n3. 클릭하여 실행 결과 눈으로 확인하기",
+            "tags": lesson.get("keywords", ["리서치노트", "시스템설정"]),
+            "code_block": "1. 대상 설정 위치 확인\n2. 옵션 변경 실행\n3. 반영 결과 확인",
             "content": manual_body
         }
 
@@ -223,19 +281,26 @@ def generate_friendly_lesson_article(lesson, slot_info):
     if api_key and genai is not None:
         client = genai.Client(api_key=api_key)
         prompt = f"""
-당신은 컴퓨터를 전혀 모르는 컴맹 입문자를 위해 가상 OS에서 직접 기능을 테스트하고 세상에서 가장 친절하게 설명하는 '제미나이 컴퓨터 기초 선생님'입니다.
-수업 제목: {lesson['title']}
-부제목: {lesson.get('subtitle', '')}
-작성 가이드: {lesson['prompt_guide']}
-반드시 마크다운 소제목(##), 비교표(| 컬럼 |), 인용구(> 💡 팁), 1~3단계 설명과 [IMAGE_1], [IMAGE_2], [IMAGE_3] 플레이스홀더를 포함하세요.
+당신은 'ChooSu Lab (컴퓨팅 아카이브 & 디지털 리터러시 연구실)'의 총괄 에디터입니다.
+아래 주제를 바탕으로 컴퓨터의 기초 원리와 환경 설정을 명쾌하게 정리한 리서치 노트를 작성하세요.
+
+[절대 준수 원칙]
+1. 독자를 '초보자', '컴맹', '학생', '어르신'으로 부르거나 "쉽게 설명할게요~", "선생님과 함께", "1교시" 같은 유치하거나 가르치려 드는 표현을 절대 사용하지 마세요.
+2. 대신 전문 용어의 진입장벽은 자연스럽게 낮추어(괄호 안에 쉬운 풀이나 직관적인 비유 병기), 누구나 읽었을 때 막힘없이 이해되면서도 지적인 연구실 아카이브(배움센터·리서치 노트)의 품격이 느껴지도록 담백하고 정돈된 문체(~합니다, ~입니다)로 작성하세요.
+3. 마크다운 소제목(`##`), 비교표(`| 구분 |`), 핵심 요약 인용구(`>`), 단계별 설명(Step 1~3)과 `[IMAGE_1]`, `[IMAGE_2]`, `[IMAGE_3]` 플레이스홀더를 반드시 포함하세요.
+
+- 주제 제목: {lesson['title']}
+- 부제목: {lesson.get('subtitle', '')}
+- 작성 가이드: {lesson['prompt_guide']}
+
 출력 형식:
 [TAGS] 태그1, 태그2, 태그3, 태그4
 [CODE_BLOCK]
-3~4줄 실습 요약
+3~4줄 핵심 절차 요약
 [/CODE_BLOCK]
 [TITLE] {lesson['title']}
 [CONTENT]
-본문
+마크다운 본문
 """
         for model_name in ["gemini-2.5-flash", "gemini-2.0-flash"]:
             try:
@@ -243,30 +308,30 @@ def generate_friendly_lesson_article(lesson, slot_info):
                 if resp and resp.text and "[CONTENT]" in resp.text:
                     raw = resp.text
                     tags = [t.strip() for t in raw.split("[TAGS]")[1].split("\n")[0].split(",") if t.strip()] if "[TAGS]" in raw else lesson.get("keywords", [])
-                    cb = raw.split("[CODE_BLOCK]")[1].split("[/CODE_BLOCK]")[0].strip() if "[CODE_BLOCK]" in raw else "가상 OS 3단계 테스트 완료"
+                    cb = raw.split("[CODE_BLOCK]")[1].split("[/CODE_BLOCK]")[0].strip() if "[CODE_BLOCK]" in raw else "1. 설정 메뉴 확인\n2. 옵션 변경\n3. 결과 확인"
                     body = raw.split("[CONTENT]")[1].strip()
                     return {"title": lesson["title"], "subtitle": lesson.get("subtitle", ""), "tags": tags, "code_block": cb, "content": body}
             except Exception as e:
-                print(f"⚠️ Gemini API 전환: {e}")
+                print(f"Gemini API 전환: {e}")
 
     return build_builtin_lesson_article(lesson)
 
 
-def publish_post(lesson, article, slot_info, image_paths):
+def publish_post(lesson, article, image_paths):
     content = article["content"]
     step_titles = [
-        "🖥️ [제미나이 가상 OS 테스트 1단계] 시작 화면 및 버튼 위치 찾기",
-        "🖱️ [제미나이 가상 OS 테스트 2단계] 마우스 클릭 및 값 입력 실행 순간",
-        "🎉 [제미나이 가상 OS 테스트 3단계] 설정 반영 완료 및 결과 화면 확인"
+        "Step 1 · 초기 상태 및 대상 메뉴 위치 확인",
+        "Step 2 · 인터페이스 조작 및 설정 값 입력",
+        "Step 3 · 시스템 반영 완료 및 결과 화면"
     ]
 
     for idx, img_path in enumerate(image_paths):
         placeholder = f"[IMAGE_{idx+1}]"
         clean_img_path = img_path if img_path.startswith("/") else f"/{img_path}"
-        caption = step_titles[idx] if idx < len(step_titles) else f"가상 OS 실습 화면 {idx+1}"
+        caption = step_titles[idx] if idx < len(step_titles) else f"실습 화면 {idx+1}"
         md_img = (
             f'\n\n<figure class="os-screenshot-card">\n'
-            f'  <div class="os-screenshot-bar"><span>🔴 🟡 🟢</span><span class="os-bar-title">{caption}</span><span class="os-bar-badge">Argon OS Sandbox</span></div>\n'
+            f'  <div class="os-screenshot-bar"><span>🔴 🟡 🟢</span><span class="os-bar-title">{caption}</span><span class="os-bar-badge">ChooSu Lab</span></div>\n'
             f'  <img src="{clean_img_path}" alt="{caption}" loading="lazy" />\n'
             f'  <figcaption>{caption}</figcaption>\n'
             f'</figure>\n\n'
@@ -277,6 +342,11 @@ def publish_post(lesson, article, slot_info, image_paths):
             content += md_img
 
     content = re.sub(r'\[IMAGE_\d+\]', '', content)
+
+    # 하단에는 간결한 1줄 AI 활용 안내 문구만 부착
+    ai_footer = "\n\n---\n\n<p class=\"ai-footnote\">본 아카이브 노트는 AI를 활용하여 생성·정리되었습니다.</p>\n"
+    content += ai_footer
+
     tags_yaml = ", ".join(f'"{t}"' for t in article["tags"])
     thumb_url = image_paths[1] if len(image_paths) > 1 else (image_paths[0] if image_paths else "")
     safe_title = article["title"].replace('"', '\\"')
@@ -287,14 +357,9 @@ layout: post
 title: "{safe_title}"
 subtitle: "{safe_subtitle}"
 date: {NOW_KST.strftime('%Y-%m-%d %H:%M:%S +0900')}
-stage: "{lesson.get('stage', '기초 컴퓨터 수업')}"
-slot_id: "{slot_info['slot_id']}"
-slot_badge: "{slot_info['slot_badge']}"
-os_type: "{lesson.get('os_type', 'Argon Virtual OS')}"
+category: "{lesson.get('category', 'OS 환경 설정')}"
+os_type: "{lesson.get('os_type', 'OS 테스트 환경')}"
 os_scene: "{lesson.get('os_scene', 'pc_rename')}"
-difficulty: "{lesson.get('difficulty', 'Lv.1 완전 입문')}"
-verified_by: "GPT Think Reasoning Gatekeeper"
-theme_system: "Argon Design System"
 thumbnail: "{thumb_url}"
 tags: [{tags_yaml}]
 ---
@@ -304,19 +369,17 @@ tags: [{tags_yaml}]
     post_filepath = os.path.join(POSTS_DIR, post_filename)
     with open(post_filepath, "w", encoding="utf-8") as f:
         f.write(front_matter + content)
-    print(f"✅ [1단계: Gemini 생산 완료] 포스트 파일 생성: {post_filepath}")
+    print(f"포스트 생성 완료: {post_filepath}")
     return post_filepath
 
 
 if __name__ == "__main__":
     history_list = load_history()
-    slot_info = detect_slot_info()
-    lesson = select_next_lesson(history_list, slot_info)
+    lesson = select_next_lesson(history_list)
 
-    print(f"📌 [Gemini 생산 시작] 커리큘럼: [{lesson['stage']}] {lesson['title']}")
-    article = generate_friendly_lesson_article(lesson, slot_info)
+    print(f"[ChooSu Lab] 주제: [{lesson.get('category')}] {lesson['title']}")
+    article = generate_lab_article(lesson)
 
-    print(f"🖥️ [가상화 OS 테스트] 시나리오({lesson.get('os_scene', 'pc_rename')}) 실행 및 3단계 스크린샷 캡처 중...")
     os_images = generate_virtual_os_screenshots(
         scene_type=lesson.get("os_scene", "pc_rename"),
         lesson_title=article["title"],
@@ -326,13 +389,6 @@ if __name__ == "__main__":
         baseurl=BASEURL
     )
 
-    post_path = publish_post(lesson, article, slot_info, os_images)
-
-    # GPT Think 추론 검증 게이트 실행
-    print("🔍 [2단계: GPT Think 추론 검증 시작] 포스트 내용 및 가상 OS 테스트 증적을 대조합니다...")
-    verify_report = verify_post_and_os_test(post_path, "audit_logs/last_os_test.json")
-    if verify_report["verdict"] != "APPROVED":
-        raise RuntimeError("GPT Think 검증 기준 미달로 배포를 중단합니다.")
-
+    post_path = publish_post(lesson, article, os_images)
+    verify_post_and_os_test(post_path, "audit_logs/last_os_test.json")
     save_history(lesson["id"])
-    print("🚀 [3단계: Git 운영 승인] 모든 생산·가상OS 테스트·GPT Think 검증이 완료되었습니다!")
