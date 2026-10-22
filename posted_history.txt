@@ -4,3 +4,4 @@ lab-03-minesweeper-gui-history
 lab-04-desktop-view-and-scaling
 lab-05-from-eniac-to-laptop
 lab-archive-006
+lab-archive-007
