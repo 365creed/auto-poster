@@ -1,31 +1,31 @@
 {
-  "captured_at": "2026-10-23 14:56:22 KST",
-  "scene_type": "file_explorer",
+  "captured_at": "2026-10-23 15:28:47 KST",
+  "scene_type": "system_monitor",
   "os_profile": "ubuntu2404",
-  "lesson_title": "Hierarchical File System & i-node/MFT Architecture",
+  "lesson_title": "[ChooSu Lab Technical Report #10] 시분할 다중처리(Time-Sharing Multitasking)의 문맥 교환(Context Switch) 오버헤드와 선점형 CPU 스케줄러(CFS · MLFQ)의 공정성 수리 모델",
   "x11_display_server": "TigerVNC Xvnc :99 / Xvfb 1280x800x24 + GTK3 Gdk Pixbuf Capture",
-  "kernel_uname": "Linux 4.19.0-gvisor x86_64",
+  "kernel_uname": "Linux 6.17.0-1022-azure x86_64",
   "screenshots": [
     {
       "step": 1,
-      "file": "/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step1_20261023_012822.png",
-      "url": "/choosu-lab/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step1_20261023_012822.png",
+      "file": "assets/images/2026-10-23/os_step1_20261023_152821.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step1_20261023_152821.png",
       "resolution": "1280x800",
-      "size_bytes": 140006
+      "size_bytes": 121873
     },
     {
       "step": 2,
-      "file": "/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step2_20261023_012822.png",
-      "url": "/choosu-lab/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step2_20261023_012822.png",
+      "file": "assets/images/2026-10-23/os_step2_20261023_152821.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step2_20261023_152821.png",
       "resolution": "1280x800",
-      "size_bytes": 140411
+      "size_bytes": 126696
     },
     {
       "step": 3,
-      "file": "/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step3_20261023_012822.png",
-      "url": "/choosu-lab/tmp/choosu-lab-current/choosu-lab-main/assets/images/2026-10-23/os_step3_20261023_012822.png",
+      "file": "assets/images/2026-10-23/os_step3_20261023_152821.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step3_20261023_152821.png",
       "resolution": "1280x800",
-      "size_bytes": 141371
+      "size_bytes": 124021
     }
   ]
 }
