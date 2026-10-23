@@ -1,8 +1,8 @@
 {
-  "verified_at": "2026-10-23 12:06:44 KST",
-  "target_file": "_posts/2026-10-23-lab-archive-008-20261023_120644.md",
-  "lesson_title": "시스템 기본 환경 구성 및 인터페이스 작동 원리 탐구 #8",
-  "os_scene": "desktop_windows",
+  "verified_at": "2026-10-23 01:28:23 KST",
+  "target_file": "_posts/2026-10-23-lab-archive-007-20261023_012822.md",
+  "lesson_title": "시스템 기본 환경 구성 및 인터페이스 작동 원리 탐구 #7",
+  "os_scene": "game_minesweeper",
   "verdict": "APPROVED",
   "score": 100,
   "notes": "1280x800 캡처 3장 및 본문 구조 내부 검증 통과 (외부 비노출)"
