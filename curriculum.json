@@ -1,107 +1,284 @@
 [
   {
     "id": "lab-01-system-hostname",
-    "category": "OS 환경 설정",
+    "stage": "네트워크 식별 체계 · 커널 레지스트리 아키텍처",
     "os_scene": "pc_rename",
-    "os_type": "Windows 11 환경",
-    "title": "시스템 식별 이름(DESKTOP-XXXX)의 생성 구조와 디바이스 이름 변경 방법",
-    "subtitle": "운영체제 초기 설치 시 부여되는 호스트네임(Hostname)의 역할과 네트워크·블루투스 식별성을 높이는 이름 변경 절차",
+    "os_type": "Windows 11 Pro (23H2) & Ubuntu 24.04 · GUI + PowerShell/WSL2 CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #03] 운영체제 호스트네임(Hostname) 식별 체계의 네트워크 프로토콜 계층 분석 및 커널 레지스트리 동기화 메커니즘",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — RFC 952/1123 표준, NetBIOS/mDNS 이름 해석(Name Resolution), 그리고 비휘발성 커널 상태 전이의 구조적 해부",
     "keywords": [
-      "시스템설정",
       "호스트네임",
-      "PC이름변경",
-      "운영체제기초",
-      "네트워크식별"
+      "RFC952",
+      "RFC1123",
+      "mDNS",
+      "NetBIOS",
+      "커널레지스트리"
     ],
-    "key_points": [
-      "운영체제 설치 과정에서 자동 생성되는 임시 장치 이름(DESKTOP-XXXX)의 원리와 목적",
-      "설정(Settings) > 시스템(System) > 이름 바꾸기 메뉴를 통한 식별 이름 변경 과정",
-      "네트워크 상 충돌을 방지하는 명명 규칙(한글·영문·숫자 및 하이픈 사용, 공백 제외)"
+    "learning_goals": [
+      "ARPANET 호스트 테이블에서 출발한 RFC 952 및 RFC 1123 표준 문법 규칙과 바이트 길이 제약을 이해합니다.",
+      "로컬 네트워크에서 DNS 서버 없이도 기기 이름을 IP 주소로 변환하는 mDNS(RFC 6762)와 LLMNR 프로토콜의 차이를 분석합니다.",
+      "Windows 커널이 활성(Volatile) 호스트네임과 보류(Non-Volatile) 레지스트리 키를 분리하여 재부팅 시점에 원자적(Atomic)으로 동기화하는 이유를 규명합니다."
     ],
-    "prompt_guide": "컴퓨터나 노트북을 처음 세팅할 때 볼 수 있는 'DESKTOP-8F9K2A1' 같은 기본 장치 이름이 왜 만들어지는지(네트워크와 블루투스에서 기기를 구분하기 위한 호스트네임 개념)를 어려운 전문 용어 없이 담백하고 명쾌하게 설명하세요. 이어서 가상 OS 환경에서 [시작] -> [설정] -> [시스템] -> [이 PC의 이름 바꾸기]를 통해 직관적인 이름('ChooSu-NotePC' 또는 '우리집-노트북')으로 변경하고 재시작하는 3단계 과정을 자연스러운 연구 노트 톤으로 서술하세요."
+    "references": [
+      "Harrenstien, K., Stahl, M., & Feinler, E. (1985). DoD Internet Host Table Specification (RFC 952). IETF. https://www.rfc-editor.org/info/rfc952/",
+      "Braden, R. (Ed.). (1989). Requirements for Internet Hosts — Application and Support (RFC 1123). IETF. https://www.rfc-editor.org/info/rfc1123/",
+      "Cheshire, S., & Krochmal, M. (2013). Multicast DNS (RFC 6762). IETF."
+    ],
+    "prompt_guide": "연구소장(Chief Research Director)의 시각에서 컴퓨터 이름(Hostname)이 단순한 라벨이 아니라 RFC 952/1123 표준에 기반한 네트워크 계층 식별자임을 설명하고, mDNS/NetBIOS 이름 해석 과정과 커널 레지스트리(Hostname vs NV Hostname)의 2단계 커밋 아키텍처를 깊이 있게 서술하세요.",
+    "os_profile": "win11pro"
   },
   {
     "id": "lab-02-mouse-cursor-interaction",
-    "category": "인터페이스 원리",
+    "stage": "인간-컴퓨터 상호작용(HCI) · 커널 이벤트 아키텍처",
     "os_scene": "click_trainer",
-    "os_type": "GUI 데스크톱 환경",
-    "title": "그래픽 환경(GUI)의 핵심 입력 체계: 마우스 커서와 클릭·더블클릭·우클릭의 작동 원리",
-    "subtitle": "명령어 입력 방식을 대체한 포인팅 디바이스의 역사와 4가지 기본 마우스 이벤트(Hover, Click, Double-Click, Context Menu)의 구분",
+    "os_type": "Windows 11 Pro (23H2) · Win32 HID GUI + Event Trace CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #04] 포인팅 디바이스(Mouse)의 인간공학적 대역폭(Fitts's Law)과 GUI 운영체제의 이벤트 기반 상태 기계(Event-Driven State Machine) 연구",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 더글러스 엥겔바트(1968)의 X-Y 위치 표시기부터 피츠의 법칙(1954), USB HID 인터럽트 및 더블클릭 시간 창(Time Window)의 수학적 모델링",
     "keywords": [
-      "GUI역사",
-      "마우스인터랙션",
-      "클릭원리",
-      "컨텍스트메뉴",
-      "인터페이스기초"
+      "HCI",
+      "피츠의법칙",
+      "FittsLaw",
+      "Engelbart",
+      "마우스인터럽트",
+      "상태기계"
     ],
-    "key_points": [
-      "물리적 움직임을 화면 속 2차원 좌표(X, Y)로 변환하는 커서(Cursor)의 원리",
-      "단일 선택(좌클릭), 프로세스 실행(더블클릭), 보조 메뉴 호출(우클릭)의 역할 차이",
-      "데스크톱 화면에서 파일 아이콘을 선택하고 실행할 때 일어나는 단계별 상태 변화"
+    "learning_goals": [
+      "더글러스 엥겔바트와 윌리엄 잉글리시(1968)가 고안한 X-Y 위치 표시기의 하드웨어-커널 좌표 적분 원리를 이해합니다.",
+      "폴 피츠(Paul M. Fitts, 1954)의 인간 운동계 정보 용량 방정식(ID = log2(2D/W))을 통해 UI 타깃 설계 원리를 수식화합니다.",
+      "OS 윈도우 매니저가 가리키기(Hover), 좌클릭, 더블클릭, 우클릭을 시간 임계값(Delta t <= 500ms)과 공간 허용 오차로 판별하는 유한 상태 기계(FSM)를 분석합니다."
     ],
-    "prompt_guide": "과거 키보드로만 명령어를 치던 시절을 넘어 마우스와 화살표(커서)가 어떻게 직관적인 컴퓨터 조작을 가능하게 했는지 설명하세요. 가리키기(Hover), 선택하기(좌클릭), 열기 및 실행(더블클릭), 상황에 맞는 옵션 부르기(우클릭 컨텍스트 메뉴) 4가지 동작의 차이를 명확한 표와 단계별 화면으로 정리하세요. 독자를 가르치려 들거나 '쉽게 설명할게요' 같은 멘트 없이 깔끔하고 깊이 있는 아카이브 톤을 유지하세요."
+    "references": [
+      "Fitts, P. M. (1954). The information capacity of the human motor system in controlling the amplitude of movement. Journal of Experimental Psychology, 47(6), 381–391. https://pubmed.ncbi.nlm.nih.gov/1402698/",
+      "Engelbart, D. C., & English, W. K. (1968). A research center for augmenting human intellect. AFIPS Fall Joint Computer Conference, Vol. 33, 395–410. https://service-science.info/archives/5024"
+    ],
+    "prompt_guide": "연구소장의 관점에서 마우스 조작(Hover, 좌클릭, 더블클릭, 우클릭)을 피츠의 법칙(Fitts's Law, 1954)과 엥겔바트(1968)의 논문, 그리고 OS 커널의 USB HID 인터럽트 및 유한 상태 기계(FSM) 수식으로 엄밀하게 분석하세요.",
+    "os_profile": "win11pro"
   },
   {
     "id": "lab-03-minesweeper-gui-history",
-    "category": "소프트웨어 아카이브",
+    "stage": "계산 복잡도 이론(Computational Complexity) · HCI 게이미피케이션",
     "os_scene": "game_minesweeper",
-    "os_type": "OS 내장 애플리케이션",
-    "title": "초기 운영체제는 왜 '지뢰찾기'와 '솔리테어'를 기본 탑재했을까? 게임에 숨겨진 GUI 학습 설계",
-    "subtitle": "마우스 보급 초기 사용자의 정밀 클릭과 드래그 앤 드롭 숙련도를 높이기 위해 고안된 인터페이스 훈련 도구로서의 고전 게임 분석",
+    "os_type": "Windows 11 Pro (23H2) · Minesweeper GUI + Python SAT CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #05] GUI 전환기 암묵적 사용자 훈련(Implicit Onboarding) 설계와 지뢰찾기(Minesweeper) 일관성 결정 문제의 NP-완전성(NP-Completeness) 규명",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — Windows 3.1의 좌·우클릭 신경운동 학습 메커니즘과 리처드 케이(Richard Kaye, 2000)의 부울 만족 가능성(SAT) 환원 증명 분석",
     "keywords": [
-      "지뢰찾기역사",
-      "솔리테어",
-      "GUI설계",
-      "마우스정밀조작",
-      "운영체제역사"
+      "지뢰찾기",
+      "NP완전성",
+      "RichardKaye",
+      "계산복잡도",
+      "부울대수",
+      "HCI"
     ],
-    "key_points": [
-      "1990년대 초 텍스트 환경(CLI)에서 그래픽 환경(Windows 3.0/3.1)으로 전환할 때의 사용자 경험 과제",
-      "드래그 앤 드롭을 익히게 한 솔리테어와 좌·우클릭 구분을 자연스럽게 체득시킨 지뢰찾기의 설계 의도",
-      "가상 환경에서 지뢰찾기 보드를 열며 확인하는 좌클릭(개방)과 우클릭(깃발 표시)의 상호작용"
+    "learning_goals": [
+      "1990년 CLI에서 GUI로 전환하던 시기 지뢰찾기가 수행한 피츠의 법칙 정밀 타기팅 및 좌·우클릭 분리 훈련 효과를 이해합니다.",
+      "지뢰찾기 보드의 각 숫자 단서를 0-1 정수 선형 제약식(Pseudo-Boolean Constraint)으로 수식화합니다.",
+      "리처드 케이(Richard Kaye, 2000)가 증명한 지뢰찾기 일관성 문제의 NP-완전성(NP-Completeness)과 논리 게이트 환원 원리를 파악합니다."
     ],
-    "prompt_guide": "윈도우 운영체제에 기본 포함되었던 지뢰찾기(Minesweeper)와 카드게임(Solitaire)이 단순한 오락거리가 아니라, 마우스라는 낯선 입력 장치의 좌클릭·우클릭·드래그를 자연스럽게 익히도록 설계된 인터페이스 온보딩 도구였다는 역사적 사실을 흥미롭게 풀어주세요. 가상 환경에서 실제로 지뢰찾기를 플레이하며 좌클릭과 우클릭이 어떻게 구분되어 작동하는지 3단계 캡처와 함께 분석하세요."
+    "references": [
+      "Kaye, R. (2000). Minesweeper is NP-complete. The Mathematical Intelligencer, 22(2), 9–15. https://academic.timwylie.com/17CSCI4341/minesweeper_kay.pdf",
+      "Fitts, P. M. (1954). The information capacity of the human motor system in controlling the amplitude of movement. Journal of Experimental Psychology, 47(6), 381–391. https://pubmed.ncbi.nlm.nih.gov/1402698/"
+    ],
+    "prompt_guide": "연구소장의 시각에서 지뢰찾기(Minesweeper)가 어떻게 전 세계 사용자의 GUI 마우스 조작을 훈련시켰는지 설명하고, 리처드 케이(Richard Kaye, 2000)의 논문을 인용하여 지뢰찾기가 단순한 놀이가 아니라 부울 SAT 문제와 동치인 NP-완전(NP-Complete) 수학 문제임을 수식과 함께 증명하세요.",
+    "os_profile": "win11pro"
   },
   {
     "id": "lab-04-desktop-view-and-scaling",
-    "category": "OS 환경 설정",
-    "os_scene": "desktop_windows",
-    "os_type": "데스크톱 디스플레이 환경",
-    "title": "데스크톱 바탕화면의 아이콘 배율 조절과 격자(Grid) 자동 정렬 메커니즘",
-    "subtitle": "고해상도 모니터 환경에서 가독성을 높이는 아이콘 크기 변경 및 컨텍스트 메뉴를 활용한 작업 공간 정리 방법",
+    "stage": "컴퓨터 그래픽스 · 디스플레이 컴포지션 및 시각 인지",
+    "os_scene": "desktop_scale",
+    "os_type": "Windows 11 Pro (23H2) · DWM Display GUI + PowerShell CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #06] 고해상도(HiDPI) 디스플레이의 장치 독립적 픽셀(DIP) 변환 행렬과 데스크톱 컴포지터(DWM)의 벡터 래스터화 및 시각적 공간 격자 연구",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 물리적 화소 밀도(PPI)와 시각(Visual Angle)의 광학적 관계, 바이큐빅 보간법(Bicubic Interpolation), 그리고 셸 아이콘 그리드 양자화 분석",
     "keywords": [
-      "바탕화면설정",
-      "아이콘크기",
-      "디스플레이배율",
-      "우클릭메뉴",
-      "작업공간정리"
+      "HiDPI",
+      "DIP",
+      "디스플레이스케일링",
+      "DWM",
+      "벡터래스터화",
+      "인간공학"
     ],
-    "key_points": [
-      "모니터 해상도와 픽셀 밀도에 따라 아이콘과 텍스트 크기가 작아 보이는 현상의 원인",
-      "바탕화면 컨텍스트 메뉴([보기] · [정렬 기준])를 활용한 아이콘 배율 및 자동 줄 맞춤 설정",
-      "키보드 Ctrl 키와 마우스 휠 조합을 이용한 실시간 화면 배율 제어"
+    "learning_goals": [
+      "모니터의 물리적 픽셀 밀도(PPI) 증가에 따른 시각(Visual Angle) 축소 현상을 삼각함수 수식으로 유도합니다.",
+      "Windows DWM 컴포지터가 논리 좌표(DIP)를 물리 좌표로 매핑하는 2차원 아핀 변환 행렬(Affine Transformation Matrix)을 이해합니다.",
+      "레거시 비트맵 업스케일링 시 발생하는 블러 현상과 트루타입 벡터 폰트의 서브픽셀 렌더링(ClearType) 차이를 분석합니다."
     ],
-    "prompt_guide": "해상도가 높은 모니터나 노트북에서 바탕화면 아이콘이 작게 보일 때 이를 조절하는 원리와 방법을 설명하세요. 빈 공간 우클릭 -> [보기] -> [큰 아이콘] 설정, [정렬 기준]을 통한 자동 정리, 그리고 Ctrl + 마우스 휠 단축 조작을 깔끔하게 정리하세요."
+    "references": [
+      "Microsoft Corporation. High DPI Desktop Application Development on Windows. Microsoft Learn Win32 Technical Documentation. https://learn.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows",
+      "Fitts, P. M. (1954). The information capacity of the human motor system in controlling the amplitude of movement. Journal of Experimental Psychology, 47(6), 381–391. https://pubmed.ncbi.nlm.nih.gov/1402698/"
+    ],
+    "prompt_guide": "연구소장의 시각에서 고해상도 모니터의 PPI 계산식, 시각(Visual Angle) 확보를 위한 OS의 DIP(Device-Independent Pixel) 아핀 변환 행렬, 그리고 벡터/비트맵 렌더링의 차이를 정밀하게 분석하세요.",
+    "os_profile": "win11pro"
   },
   {
     "id": "lab-05-from-eniac-to-laptop",
-    "category": "컴퓨팅 아키텍처",
-    "os_scene": "history_simulator",
-    "os_type": "아키텍처 시뮬레이션",
-    "title": "진공관 계산기에서 모바일 노트북까지: 0과 1의 전기 신호가 데이터를 처리하는 근원적 원리",
-    "subtitle": "초기 대형 컴퓨터(ENIAC)부터 트랜지스터 집적회로, 현대 랩톱(Laptop)으로 이어지는 소형화 역사와 이진법 연산 구조",
+    "stage": "컴퓨터 아키텍처 계보학 · 반도체 물리학 및 시스템 설계",
+    "os_scene": "system_monitor",
+    "os_type": "Rocky Linux 9.4 (Blue Onyx) · Hardware Profiler GUI + Root CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #07] 폰 노이만 내장형 프로그램 아키텍처(EDVAC, 1945)의 수리논리학적 기원과 데나드 MOSFET 스케일링(Dennard, 1974)을 통한 현대 노트북의 열역학적 진화",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 30톤 진공관 컴퓨터 ENIAC의 하드와이어드 한계 극복부터 CPU·RAM·SSD 메모리 계층 구조의 평균 접근 시간(AMAT) 최적화까지",
     "keywords": [
-      "컴퓨터역사",
-      "노트북구조",
-      "이진법원리",
-      "트랜지스터",
-      "컴퓨팅기초"
+      "폰노이만아키텍처",
+      "EDVAC",
+      "ENIAC",
+      "데나드스케일링",
+      "MOSFET",
+      "메모리계층구조"
     ],
-    "key_points": [
-      "전류의 흐름(ON=1, OFF=0)을 조합해 숫자·문자·이미지를 표현하는 디지털 데이터의 기본 원리",
-      "진공관에서 트랜지스터, 마이크로프로세서(CPU)로 발전하며 책상 위(Desktop)와 무릎 위(Laptop)로 들어온 과정",
-      "배터리 효율과 발열 제어를 중심으로 설계된 현대 노트북 하드웨어의 특징"
+    "learning_goals": [
+      "ENIAC의 물리적 배선(Hard-wired) 한계를 극복한 폰 노이만(1945) EDVAC 보고서의 내장형 프로그램(Stored-Program) 원리를 이해합니다.",
+      "로버트 데나드(1974)의 MOSFET 스케일링 법칙과 동적 소비전력 방정식(P = alpha * C * V^2 * f)이 어떻게 30톤 컴퓨터를 1kg 노트북으로 축소시켰는지 규명합니다.",
+      "폰 노이만 병목(Von Neumann Bottleneck)을 완화하기 위한 CPU 캐시-RAM-SSD 계층 구조와 AMAT 수식을 분석합니다."
     ],
-    "prompt_guide": "컴퓨터의 어원(Compute)부터 시작해 진공관 컴퓨터 에니악(ENIAC), 트랜지스터와 반도체의 발명, 데스크톱 PC를 거쳐 휴대용 노트북(Laptop)으로 진화한 흐름을 차분하고 깊이 있게 정리하세요."
+    "references": [
+      "Von Neumann, J. (1945). First Draft of a Report on the EDVAC. Moore School of Electrical Engineering, University of Pennsylvania. https://web.mit.edu/sts.035/www/PDFs/edvac.pdf",
+      "Dennard, R. H., Gaensslen, F. H., Yu, H. N., Rideout, V. L., Bassous, E., & LeBlanc, A. R. (1974). Design of ion-implanted MOSFET's with very small physical dimensions. IEEE Journal of Solid-State Circuits, 9(5), 256–268. https://web.stanford.edu/class/cs114/readings/dennard.pdf"
+    ],
+    "prompt_guide": "연구소장의 시각에서 1945년 존 폰 노이만의 EDVAC 원전 논문과 1974년 로버트 데나드의 IEEE MOSFET 스케일링 논문을 인용하여 컴퓨터의 역사와 CPU-RAM-SSD 아키텍처를 학술적으로 해설하세요.",
+    "os_profile": "rocky94"
+  },
+  {
+    "id": "lab-archive-006",
+    "stage": "시스템 아키텍처 · 가상 메모리 및 커널 스케줄링 연구",
+    "os_scene": "system_monitor",
+    "os_type": "Ubuntu 24.04.1 LTS (Noble Numbat) · System Monitor GUI + Bash CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #08] 현대 운영체제의 가상 메모리(Virtual Memory) 계층 구조와 피터 데닝(Peter J. Denning, 1968)의 워킹셋(Working Set) 모델 및 페이지 폴트(Page Fault) 스래싱 제어 메커니즘",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — MMU 하드웨어 주소 변환(TLB), 다중 프로그램 환경의 참조 지역성(Locality of Reference), 그리고 RAM 부족 시 프로그램이 멈추는 현상(Thrashing)의 수학적 규명",
+    "keywords": [
+      "가상메모리",
+      "워킹셋모델",
+      "PeterDenning",
+      "페이지폴트",
+      "스래싱",
+      "시스템아키텍처"
+    ],
+    "learning_goals": [
+      "64비트 가상 주소 공간(VAS)과 MMU 다단계 페이지 테이블 및 TLB 캐시의 유효 접근 시간(EAT) 수식을 이해합니다.",
+      "피터 데닝(Peter J. Denning, 1968)의 워킹셋(Working Set) 모델 W(t, tau)을 통해 메모리 참조 지역성을 정량화합니다.",
+      "활성 워킹셋의 총합이 물리 RAM을 초과할 때(D > M) 발생하는 스래싱(Thrashing) 현상과 커널의 제어 메커니즘을 규명합니다."
+    ],
+    "references": [
+      "Denning, P. J. (1968). The working set model for program behavior. Communications of the ACM (CACM), 11(5), 323–333. https://en.wikipedia.org/wiki/Working_set",
+      "Von Neumann, J. (1945). First Draft of a Report on the EDVAC. University of Pennsylvania. https://web.mit.edu/sts.035/www/PDFs/edvac.pdf"
+    ],
+    "prompt_guide": "연구소장의 시각에서 피터 데닝(1968)의 워킹셋(Working Set) 논문과 MMU/TLB 유효 메모리 접근 시간(EAT) 수식을 바탕으로 가상 메모리와 스래싱(Thrashing) 현상을 심층 분석하세요.",
+    "os_profile": "ubuntu2404"
+  },
+  {
+    "id": "lab-archive-007",
+    "stage": "스토리지 엔지니어링 · 파일 시스템 및 커널 I/O 아키텍처",
+    "os_scene": "file_explorer",
+    "os_type": "Ubuntu 24.04.1 LTS (Noble Numbat) · Files GUI + ext4 i-node CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #09] 계층형 파일 시스템(Hierarchical File System)의 메타데이터 아키텍처(i-node · MFT)와 리치·톰슨(Ritchie & Thompson, 1974)의 UNIX I/O 추상화 및 저널링 무결성 연구",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 왜 10GB짜리 영상을 폴더 간에 이동할 때는 0.1초밖에 걸리지 않으며, 지운 파일은 어떻게 복구되는가? 파일 이름 공간(Namespace)과 물리 블록 포인터의 분리 원리 규명",
+    "keywords": [
+      "파일시스템",
+      "inode",
+      "NTFS",
+      "MFT",
+      "RitchieThompson",
+      "저널링",
+      "스토리지아키텍처"
+    ],
+    "learning_goals": [
+      "리치와 톰슨(1974)이 확립한 디렉터리 이름 공간(Directory Entry)과 물리적 메타데이터(i-node/MFT)의 분리 원칙을 이해합니다.",
+      "다단계 간접 블록 포인터(Indirect Block Addressing)와 NTFS B+ 트리 익스텐트 구조의 탐색 복잡도를 분석합니다.",
+      "파일 이동, 휴지통 이동, 영구 삭제 시 실제 데이터 블록과 메타데이터 비트맵에서 일어나는 변화 및 저널링(WAL) 무결성 복원 원리를 규명합니다."
+    ],
+    "references": [
+      "Ritchie, D. M., & Thompson, K. (1974). The UNIX Time-Sharing System. Communications of the ACM (CACM), 17(7), 365–375. https://www.nokia.com/bell-labs/about/dennis-m-ritchie/cacm.pdf",
+      "McKusick, M. K., Joy, W. N., Leffler, S. J., & Fabry, R. S. (1984). A Fast File System for UNIX. ACM Transactions on Computer Systems, 2(3), 181–197."
+    ],
+    "prompt_guide": "연구소장의 시각에서 데니스 리치와 켄 톰슨(1974)의 UNIX 논문을 인용하여 디렉터리 엔트리와 i-node(또는 NTFS MFT)의 분리 아키텍처, 파일 삭제/복구의 물리적 진실, 그리고 저널링(Journaling) 트랜잭션을 깊이 있게 해설하세요.",
+    "os_profile": "ubuntu2404"
+  },
+  {
+    "id": "lab-08-process-scheduling-multitasking",
+    "stage": "운영체제 커널 · CPU 스케줄링 및 동시성 제어 연구",
+    "os_scene": "system_monitor",
+    "os_type": "Ubuntu 24.04.1 LTS (Kernel 6.8) · CFS Scheduler GUI + Bash CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #10] 시분할 다중처리(Time-Sharing Multitasking)의 문맥 교환(Context Switch) 오버헤드와 선점형 CPU 스케줄러(CFS · MLFQ)의 공정성 수리 모델",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 하나의 CPU 코어는 어떻게 수백 개의 프로그램을 동시에 실행하는 것처럼 속이는가? 타이머 인터럽트, PCB 상태 전이, 그리고 리틀의 법칙(Little's Law) 대기열 분석",
+    "keywords": [
+      "CPU스케줄링",
+      "문맥교환",
+      "ContextSwitch",
+      "시분할시스템",
+      "선점형스케줄러",
+      "커널아키텍처"
+    ],
+    "learning_goals": [
+      "하드웨어 타이머 인터럽트(Timer Interrupt)를 통해 CPU 제어권을 회수하는 선점형 멀티태스킹(Preemptive Multitasking)과 문맥 교환(Context Switch) 레지스터 저장 원리를 이해합니다.",
+      "대기열 이론의 리틀의 법칙(L = lambda * W)과 라운드 로빈(Round-Robin) 시간 할당량(Time Quantum) 설정에 따른 응답 시간-오버헤드 트레이드오프를 수식화합니다.",
+      "현대 운영체제의 다단계 피드백 큐(MLFQ) 및 가상 런타임(vruntime) 기반 완전 공정 스케줄러(CFS)의 작동 구조를 분석합니다."
+    ],
+    "references": [
+      "Ritchie, D. M., & Thompson, K. (1974). The UNIX Time-Sharing System. Communications of the ACM (CACM), 17(7), 365–375. https://www.nokia.com/bell-labs/about/dennis-m-ritchie/cacm.pdf",
+      "Little, J. D. C. (1961). A Proof for the Queuing Formula: L = λW. Operations Research, 9(3), 383–387."
+    ],
+    "prompt_guide": "연구소장의 시각에서 CPU 코어가 수밀리초(ms) 단위로 문맥 교환(Context Switch)을 수행하며 다중 작업을 처리하는 원리를 설명하고, 타임 퀀텀(Time Quantum) 수식과 대기열 이론(Little's Law, 1961; Ritchie & Thompson, 1974)을 인용하여 심층 기술 보고서를 작성하세요.",
+    "os_profile": "ubuntu2404"
+  },
+  {
+    "id": "lab-09-clipboard-ipc-data-pipeline",
+    "stage": "프로세스 간 통신(IPC) · 문자 인코딩 및 메모리 공유",
+    "os_scene": "file_explorer",
+    "os_type": "Windows 11 Pro (23H2) · IPC Clipboard Inspector GUI + PowerShell CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #11] 프로세스 간 통신(IPC) 기반 클립보드(Ctrl+C / Ctrl+V)의 지연 렌더링(Delayed Rendering) 아키텍처와 유니코드(UTF-8) 바이트 직렬화 연구",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 서로 격리된 프로그램들은 어떻게 텍스트와 이미지를 주고받는가? 커널 공유 메모리(Shared Memory), 포맷 협상(Format Negotiation), 그리고 톰슨·파이크(1993)의 UTF-8 인코딩 분석",
+    "keywords": [
+      "클립보드",
+      "IPC",
+      "공유메모리",
+      "UTF8",
+      "유니코드",
+      "지연렌더링"
+    ],
+    "learning_goals": [
+      "가상 메모리 보호로 인해 서로의 메모리를 읽을 수 없는 독립된 프로세스들이 커널의 클립보드 공유 메모리(IPC)를 통해 데이터를 교환하는 원리를 이해합니다.",
+      "대용량 데이터를 복사할 때 즉시 메모리를 복제하지 않고 붙여넣기(Ctrl+V) 시점까지 생성을 유예하는 지연 렌더링(Delayed Rendering) 메커니즘을 분석합니다.",
+      "켄 톰슨과 롭 파이크(Thompson & Pike, 1993)가 설계한 가변 길이 UTF-8 인코딩의 접두사 부호(Prefix Code) 구조와 다중 포맷 협상 테이블을 규명합니다."
+    ],
+    "references": [
+      "Pike, R., & Thompson, K. (1993). Hello World or Καλημέρα κόσμε or こんにちは 世界. Proceedings of the Winter 1993 USENIX Conference, 43–50. https://doc.cat-v.org/plan_9/4th_edition/papers/utf",
+      "Denning, P. J. (1968). The working set model for program behavior. Communications of the ACM, 11(5), 323–333. https://en.wikipedia.org/wiki/Working_set"
+    ],
+    "prompt_guide": "연구소장의 시각에서 일상적인 복사(Ctrl+C)와 붙여넣기(Ctrl+V) 이면에 작동하는 OS 커널의 프로세스 간 통신(IPC), 지연 렌더링(Delayed Rendering) 최적화, 그리고 롭 파이크와 켄 톰슨(1993)의 UTF-8 유니코드 인코딩 논문을 연결하여 정밀하게 서술하세요.",
+    "os_profile": "win11pro"
+  },
+  {
+    "id": "lab-10-tcpip-dns-browser-journey",
+    "stage": "네트워크 프로토콜 엔지니어링 · 분산 시스템 및 암호학",
+    "os_scene": "pc_rename",
+    "os_type": "Rocky Linux 9.4 (Blue Onyx) · Network Packet Analyzer GUI + Root CLI",
+    "difficulty": "Research Report · 기초 원리 및 학술 심화",
+    "title": "[ChooSu Lab Technical Report #12] 웹 브라우저 주소창 입력 후 100밀리초 동안 일어나는 일: 서프·칸(Cerf & Kahn, 1974)의 TCP 패킷 캡슐화와 계층형 DNS 및 TLS 핸드셰이크의 수리적 분석",
+    "subtitle": "ChooSu Lab Chief Director's Research Note — 도메인 이름(URL)이 광케이블의 빛 신호로 변환되어 화면에 렌더링되기까지의 7계층 프로토콜 상태 전이와 혼잡 제어(Congestion Control) 메커니즘",
+    "keywords": [
+      "TCPIP",
+      "CerfKahn",
+      "DNS",
+      "네트워크아키텍처",
+      "패킷스위칭",
+      "3WayHandshake"
+    ],
+    "learning_goals": [
+      "빈튼 서프와 로버트 칸(Cerf & Kahn, 1974)의 논문에서 탄생한 TCP/IP 패킷 교환망의 캡슐화(Encapsulation)와 3-Way Handshake 상태 전이를 이해합니다.",
+      "재귀적·반복적 DNS 쿼리를 통해 도메인 이름이 IP 주소로 변환되는 계층형 분산 데이터베이스 탐색 시간(RTT)을 수식화합니다.",
+      "패킷 유실이 발생하는 공중 인터넷망에서 신뢰성을 보장하는 슬라이딩 윈도우(Sliding Window)와 재전송 타임아웃(RTO) 알고리즘을 분석합니다."
+    ],
+    "references": [
+      "Cerf, V., & Kahn, R. (1974). A Protocol for Packet Network Intercommunication. IEEE Transactions on Communications, 22(5), 637–648. https://www.cs.princeton.edu/courses/archive/fall06/cos561/papers/cerf74.pdf",
+      "Braden, R. (Ed.). (1989). Requirements for Internet Hosts — Application and Support (RFC 1123). IETF. https://www.rfc-editor.org/info/rfc1123/"
+    ],
+    "prompt_guide": "연구소장의 시각에서 웹 브라우저 주소창에 주소를 치고 엔터를 누른 뒤 화면이 뜨기까지의 과정을 빈튼 서프와 로버트 칸(Cerf & Kahn, 1974)의 IEEE TCP 원전 논문과 RFC 1123 표준을 인용하여 패킷 구조, RTT 지연 시간 수식, 3-Way Handshake와 함께 깊이 있게 분석하세요.",
+    "os_profile": "rocky94"
   }
 ]

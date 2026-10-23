@@ -1,0 +1,521 @@
+---
+layout: default
+title: "가상 OS 클라우드 관제실 (Admin Only)"
+---
+
+<style>
+  .vm-console-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .vm-admin-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f8fafc;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .vm-badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10b981;
+    color: #34d399;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
+  .vm-node-tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .vm-node-card {
+    background: var(--bg-surface);
+    border: 2px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.2rem 1.35rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .vm-node-card.active {
+    border-color: #2563eb;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+  }
+  .vm-node-card h3 {
+    margin: 0.35rem 0 0.25rem;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+  }
+  .vm-node-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .vm-dual-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 960px) {
+    .vm-dual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .vm-viewport-box {
+    background: #0b0f19;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .vm-viewport-bar {
+    background: #1e293b;
+    padding: 0.65rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #e2e8f0;
+    font-size: 0.82rem;
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid #334155;
+  }
+  .vm-step-btns {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .vm-step-btn {
+    background: #0f172a;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .vm-step-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #60a5fa;
+  }
+  .vm-cli-body {
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: #e2e8f0;
+    min-height: 360px;
+    max-height: 460px;
+    overflow-y: auto;
+    background: #090d14;
+  }
+  .vm-cli-input-row {
+    display: flex;
+    border-top: 1px solid #334155;
+    background: #0f172a;
+    padding: 0.55rem 0.85rem;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .vm-cli-prompt {
+    color: #34d399;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .vm-cli-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #f8fafc;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    outline: none;
+  }
+  .vm-preset-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.6rem 0.85rem;
+    background: #111827;
+    border-top: 1px solid #1f2937;
+  }
+  .vm-chip {
+    background: #1e293b;
+    color: #93c5fd;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.73rem;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+  }
+  .vm-chip:hover {
+    background: #2563eb;
+    color: #ffffff;
+  }
+  .cloud-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .cloud-btn-primary {
+    background: #2563eb;
+    color: #ffffff !important;
+  }
+  .cloud-btn-secondary {
+    background: #10b981;
+    color: #062219 !important;
+  }
+</style>
+
+<div class="vm-console-wrap">
+  <div class="vm-admin-banner">
+    <div>
+      <div class="vm-badge-live">● MULTI-OS VIRTUAL CLOUD CLUSTER · GUI + CLI DUAL READY</div>
+      <h1 style="margin:0 0 0.4rem; font-size:1.55rem; color:#ffffff;">ChooSu Lab 가상 OS 클라우드 관제실 (관리자 전용)</h1>
+      <p style="margin:0; font-size:0.9rem; color:#cbd5e1;">
+        Windows 11 Pro (23H2) · Ubuntu 24.04.1 LTS · Rocky Linux 9.4 3대 가상 OS 노드의 GUI 프레임버퍼(Xvnc :99) 및 실시간 CLI 터미널을 제어합니다.
+      </p>
+    </div>
+    <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+      <a class="cloud-btn cloud-btn-secondary" href="https://codespaces.new/365creed/choosu-lab" target="_blank" rel="noopener">
+        ☁️ 무료 클라우드 VM 즉시 띄우기 (Codespaces noVNC)
+      </a>
+      <a class="cloud-btn cloud-btn-primary" href="https://github.com/365creed/choosu-lab/actions/workflows/auto_post.yml" target="_blank" rel="noopener">
+        🚀 AI 가상 OS 캡처 & 포스팅 실행 (Actions)
+      </a>
+    </div>
+  </div>
+
+  <!-- 1. 3대 가상 OS 노드 선택 탭 -->
+  <div class="vm-node-tabs">
+    <div class="vm-node-card active" id="node-win11pro" onclick="selectOSNode('win11pro')">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.75rem; font-weight:700; color:#3b82f6;">NODE #01 · KVM / QEMU + X11</span>
+        <span style="font-size:0.72rem; background:#dbeafe; color:#1d4ed8; padding:0.15rem 0.5rem; border-radius:99px; font-weight:700;">GUI + PowerShell 7.4</span>
+      </div>
+      <h3>🪟 Windows 11 Pro (23H2)</h3>
+      <div class="vm-node-meta">Build 22631.4317 · Fluent Mica GUI + WinTerminal CLI · Port 8006 (noVNC)</div>
+    </div>
+
+    <div class="vm-node-card" id="node-ubuntu2404" onclick="selectOSNode('ubuntu2404')">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.75rem; font-weight:700; color:#e95420;">NODE #02 · CONTAINER + XVNC :99</span>
+        <span style="font-size:0.72rem; background:#ffedd5; color:#c2410c; padding:0.15rem 0.5rem; border-radius:99px; font-weight:700;">GNOME 46 + Bash CLI</span>
+      </div>
+      <h3>🐧 Ubuntu 24.04.1 LTS (Noble Numbat)</h3>
+      <div class="vm-node-meta">Kernel 6.8.0-45-generic · GNOME System Monitor / Files + PTY · Port 3000</div>
+    </div>
+
+    <div class="vm-node-card" id="node-rocky94" onclick="selectOSNode('rocky94')">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.75rem; font-weight:700; color:#10b981;">NODE #03 · ENTERPRISE RHEL 9.4</span>
+        <span style="font-size:0.72rem; background:#d1fae5; color:#047857; padding:0.15rem 0.5rem; border-radius:99px; font-weight:700;">Cockpit GUI + Root CLI</span>
+      </div>
+      <h3>⛰️ Rocky Linux 9.4 (Blue Onyx)</h3>
+      <div class="vm-node-meta">Kernel 5.14.0-427.13.1.el9_4 · Cockpit Console + Enterprise CLI · Port 9090</div>
+    </div>
+  </div>
+
+  <!-- 2. 듀얼 GUI 프레임버퍼 뷰포트 + 대화형 CLI 터미널 -->
+  <div class="vm-dual-grid">
+    <!-- 좌측: 실제 X11(Xvnc :99) 캡처 뷰포트 -->
+    <div class="vm-viewport-box">
+      <div class="vm-viewport-bar">
+        <span id="gui-viewport-title">🖥️ [Windows 11 Pro 23H2] X11/KVM GUI + CLI Dual Framebuffer (1280×800)</span>
+        <div class="vm-step-btns">
+          <button class="vm-step-btn active" id="btn-step-1" onclick="setStep(1)">Step 1</button>
+          <button class="vm-step-btn" id="btn-step-2" onclick="setStep(2)">Step 2</button>
+          <button class="vm-step-btn" id="btn-step-3" onclick="setStep(3)">Step 3</button>
+        </div>
+      </div>
+      <div style="padding:0.75rem; background:#050811; text-align:center;">
+        <img id="vm-live-screen" src="{{ '/assets/images/2026-10-22/os_step2_20261022_154338.png' | relative_url }}" alt="Live Virtual OS Framebuffer" style="width:100%; height:auto; border-radius:8px; border:1px solid #1e293b;" />
+      </div>
+      <div style="padding:0.7rem 1rem; background:#0f172a; border-top:1px solid #1e293b; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <span id="vm-scenario-desc" style="font-size:0.8rem; color:#93c5fd;">시나리오: 호스트네임(RFC 952/1123) 및 커널 레지스트리(NV Hostname) 2단계 동기화 검증</span>
+        <div style="display:flex; gap:0.4rem;" id="scenario-selector"></div>
+      </div>
+    </div>
+
+    <!-- 우측: 대화형 CLI 터미널 콘솔 -->
+    <div class="vm-viewport-box">
+      <div class="vm-viewport-bar">
+        <span id="cli-viewport-title">&gt;_ Windows PowerShell 7.4 &amp; WSL2 CLI Sandbox</span>
+        <span style="color:#34d399; font-size:0.75rem;">● PTY Connected</span>
+      </div>
+      <div class="vm-cli-body" id="cli-output-box"></div>
+      <div class="vm-preset-chips" id="cli-preset-chips"></div>
+      <div class="vm-cli-input-row">
+        <span class="vm-cli-prompt" id="cli-prompt-label">PS C:\Windows\System32&gt;</span>
+        <input type="text" class="vm-cli-input" id="cli-cmd-input" placeholder="명령어를 입력하거나 위 프리셋 버튼을 클릭하세요 (예: hostname, uname -a, free -h)..." onkeydown="if(event.key==='Enter') runCliCommand();" />
+        <button class="vm-step-btn active" onclick="runCliCommand()">실행 (Enter)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 무료 클라우드 구동 및 로컬/원격 실행 아키텍처 안내 -->
+  <div style="background:var(--bg-surface); border:1px solid var(--border-color); border-radius:14px; padding:1.5rem 1.75rem; margin-bottom:2rem;">
+    <h2 style="margin-top:0; font-size:1.2rem;">🛠️ 무료 가상 OS 클라우드(GUI + CLI) 구동 방식 안내</h2>
+    <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.7;">
+      본 연구소의 가상 OS 환경은 유료 클라우드 서버 비용 없이 <strong>100% 무료</strong>로 상시 가동되도록 2중 클라우드 아키텍처로 설계되어 있습니다.
+    </p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1rem; margin-top:1rem;">
+      <div style="border:1px solid var(--border-color); border-radius:10px; padding:1.1rem;">
+        <strong style="color:#2563eb;">1. AI 자동 캡처 엔진 (GitHub Actions Ubuntu 24.04 + TigerVNC Xvnc :99)</strong>
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0.5rem 0 0;">
+          매 포스팅 실행 시 GitHub Actions 클라우드 러너가 <code>Xvnc :99</code> (1280×800 24-bit X11 서버)와 GTK3 프레임버퍼 및 Linux 커널 서브프로세스를 띄워, <strong>Windows 11 Pro · Ubuntu 24.04 LTS · Rocky Linux 9.4</strong>의 GUI 창과 실시간 CLI 터미널 결과를 동시에 촬영합니다.
+        </p>
+      </div>
+      <div style="border:1px solid var(--border-color); border-radius:10px; padding:1.1rem;">
+        <strong style="color:#10b981;">2. 관리자 직접 접속용 클라우드 데스크톱 (GitHub Codespaces + Docker Webtop/KVM)</strong>
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0.5rem 0 0;">
+          저장소에 포함된 <code>.devcontainer/devcontainer.json</code> 및 <code>docker-compose.virtual-cloud.yml</code>을 통해 상단 <strong>[☁️ 무료 클라우드 VM 즉시 띄우기]</strong> 버튼을 누르면 웹 브라우저 안에서 noVNC GUI 데스크톱(포트 6080/8006/3000/9090)과 실제 터미널을 무료로 직접 조작할 수 있습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE_URL = "{{ '' | relative_url }}";
+const OS_NODES = {
+  win11pro: {
+    guiTitle: "🖥️ [Windows 11 Pro 23H2] X11/KVM GUI + PowerShell CLI Framebuffer (1280×800)",
+    cliTitle: ">_ 관리자: Windows PowerShell 7.4 & cmd.exe",
+    prompt: "PS C:\\Windows\\System32>",
+    scenarios: [
+      {
+        name: "Report #03: 호스트네임(RFC 952) & 레지스트리",
+        desc: "Windows 11 Pro 설정(System > About) GUI + PowerShell Active/NV Hostname 레지스트리 검증",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_154338.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_154338.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_154338.png"
+        ]
+      },
+      {
+        name: "Report #04: 피츠의 법칙 & 마우스 FSM",
+        desc: "Win32 HID 1000Hz 인터럽트 및 더블클릭(dt <= 500ms) 유한 상태 기계 검증",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_154340.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_154340.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_154340.png"
+        ]
+      },
+      {
+        name: "Report #05: 지뢰찾기 NP-완전성(SAT)",
+        desc: "Windows Minesweeper GUI + Python Z3 부울 만족 가능성(SAT) 제약식 솔버 CLI",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_154341.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_154341.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_154341.png"
+        ]
+      },
+      {
+        name: "Report #06: HiDPI DWM 배율 행렬",
+        desc: "4K UHD (163.18 PPI) 환경의 DIP 아핀 변환 행렬 및 DirectWrite 서브픽셀 래스터화",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_154343.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_154343.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_154343.png"
+        ]
+      }
+    ],
+    presets: [
+      { cmd: "hostname", out: "ChooSu-Research-PC01" },
+      { cmd: "reg query \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\" /v \"NV Hostname\"", out: "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\n    NV Hostname    REG_SZ    ChooSu-Research-PC01  [ATOMIC SYNC OK]" },
+      { cmd: "reg query \"HKCU\\Control Panel\\Mouse\" /v DoubleClickSpeed", out: "HKEY_CURRENT_USER\\Control Panel\\Mouse\n    DoubleClickSpeed    REG_SZ    500 (ms)\n    DoubleClickWidth    REG_SZ    4 (px)" },
+      { cmd: "systeminfo | findstr /B /C:\"OS Name\" /C:\"OS Version\"", out: "OS Name:                   Microsoft Windows 11 Pro\nOS Version:                10.0.22631 N/A Build 22631.4317" }
+    ]
+  },
+  ubuntu2404: {
+    guiTitle: "🐧 [Ubuntu 24.04.1 LTS] GNOME 46 Desktop GUI + Bash Kernel CLI (1280×800)",
+    cliTitle: "Terminal — choosu@ubuntu-2404-vm: ~ (Bash 5.2 / Kernel 6.8)",
+    prompt: "choosu@ubuntu-2404-vm:~$",
+    scenarios: [
+      {
+        name: "Report #08: 가상 메모리 & 데닝 워킹셋",
+        desc: "Ubuntu 24.04 GNOME System Monitor GUI + /proc/meminfo 및 스래싱(Thrashing) 제어 CLI",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_200502.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_200502.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_200502.png"
+        ]
+      },
+      {
+        name: "Report #09: 파일 시스템(i-node) & 저널링",
+        desc: "Ubuntu 24.04 Files(Nautilus) GUI + ls -li / stat 기반 i-node 포인터 불변성 검증 CLI",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-23/os_step1_20261023_012822.png",
+          BASE_URL + "/assets/images/2026-10-23/os_step2_20261023_012822.png",
+          BASE_URL + "/assets/images/2026-10-23/os_step3_20261023_012822.png"
+        ]
+      },
+      {
+        name: "Report #01: NVIDIA GB10 & NVLink-C2C",
+        desc: "Ubuntu 24.04 DGX OS 기반 Grace Blackwell GB10 900GB/s 통합 메모리 & ConnectX-7 RDMA",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-21/capture_20261021_113027_1.png",
+          BASE_URL + "/assets/images/2026-10-21/capture_20261021_113027_2.png",
+          BASE_URL + "/assets/images/2026-10-21/term_20261021_113027.png"
+        ]
+      }
+    ],
+    presets: [
+      { cmd: "uname -a && cat /etc/os-release | head -n 2", out: "Linux ubuntu-2404-vm 6.8.0-45-generic #45-Ubuntu SMP PREEMPT_DYNAMIC x86_64 GNU/Linux\nPRETTY_NAME=\"Ubuntu 24.04.1 LTS (Noble Numbat)\"" },
+      { cmd: "free -h", out: "               total        used        free      shared  buff/cache   available\nMem:           15.6Gi       6.2Gi       4.1Gi        84Mi       5.3Gi       9.1Gi\nSwap:          4.0Gi          0B       4.0Gi" },
+      { cmd: "ls -li /etc/hostname /etc/os-release", out: "1849021 -rw-r--r-- 1 root root  16 Oct 23 14:30 /etc/hostname\n1849024 -rw-r--r-- 1 root root 382 Oct 23 14:30 /etc/os-release" },
+      { cmd: "grep -E 'pgfault|pgmajfault' /proc/vmstat", out: "pgfault 1489204 (Minor Page Faults)\npgmajfault 142 (Hard Page Faults — Working Set Stable D <= M)" }
+    ]
+  },
+  rocky94: {
+    guiTitle: "⛰️ [Rocky Linux 9.4 Blue Onyx] Cockpit Enterprise GUI + Root CLI (1280×800)",
+    cliTitle: "Terminal — root@choosu-rocky94:~# (RHEL 9.4 Enterprise Kernel 5.14)",
+    prompt: "[root@choosu-rocky94 ~]#",
+    scenarios: [
+      {
+        name: "Report #02: Dell PowerEdge R760 & L40S",
+        desc: "Rocky Linux 9.4 Cockpit 하드웨어 콘솔 + iDRAC9 열역학 풍량 및 NVMe U.2 IOPS 검증",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/capture_20261022_030208_1.png",
+          BASE_URL + "/assets/images/2026-10-22/capture_20261022_030208_2.png",
+          BASE_URL + "/assets/images/2026-10-22/term_20261022_030208.png"
+        ]
+      },
+      {
+        name: "Report #07: 폰 노이만 EDVAC & 데나드 스케일링",
+        desc: "Rocky Linux 9.4 CPU-RAM-SSD 메모리 계층 프로파일러(AMAT=3.28ns) 및 CMOS 전력 분석",
+        imgs: [
+          BASE_URL + "/assets/images/2026-10-22/os_step1_20261022_171211.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step2_20261022_171211.png",
+          BASE_URL + "/assets/images/2026-10-22/os_step3_20261022_171211.png"
+        ]
+      }
+    ],
+    presets: [
+      { cmd: "cat /etc/redhat-release && uname -r", out: "Rocky Linux release 9.4 (Blue Onyx)\n5.14.0-427.13.1.el9_4.x86_64" },
+      { cmd: "ipmitool sdr type Fan", out: "Fan1A RPM | 30h | ok | 7.1 | 16800 RPM (92% PWM)\nFan2A RPM | 31h | ok | 7.1 | 16680 RPM (91% PWM)\nInlet Temp | 04h | ok | 7.1 | 22 degrees C" },
+      { cmd: "lscpu | head -n 6", out: "Architecture:            x86_64\nCPU op-mode(s):          32-bit, 64-bit\nModel name:              Intel(R) Xeon(R) Gold 6448Y (32C / 64T)\nL1d / L1i / L2 / L3:     48K / 32K / 2.0M / 60.0M" },
+      { cmd: "iostat -xz 1 1", out: "Device   r/s     rkB/s   r_await  rareq-sz  %util\nnvme0n1 284500.0 1138000.0   0.08     4.00   94.2" }
+    ]
+  }
+};
+
+let currentOS = "win11pro";
+let currentScenarioIdx = 0;
+let currentStep = 1;
+
+function selectOSNode(osKey) {
+  currentOS = osKey;
+  currentScenarioIdx = 0;
+  currentStep = 1;
+  ["win11pro", "ubuntu2404", "rocky94"].forEach(k => {
+    document.getElementById("node-" + k).classList.toggle("active", k === osKey);
+  });
+  const node = OS_NODES[osKey];
+  document.getElementById("gui-viewport-title").textContent = node.guiTitle;
+  document.getElementById("cli-viewport-title").textContent = node.cliTitle;
+  document.getElementById("cli-prompt-label").textContent = node.prompt;
+
+  // Render scenario buttons
+  const selBox = document.getElementById("scenario-selector");
+  selBox.innerHTML = "";
+  node.scenarios.forEach((sc, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "vm-step-btn" + (idx === 0 ? " active" : "");
+    btn.textContent = sc.name;
+    btn.onclick = () => selectScenario(idx);
+    selBox.appendChild(btn);
+  });
+
+  // Render CLI preset chips
+  const chipBox = document.getElementById("cli-preset-chips");
+  chipBox.innerHTML = "";
+  node.presets.forEach(p => {
+    const c = document.createElement("span");
+    c.className = "vm-chip";
+    c.textContent = p.cmd;
+    c.onclick = () => executePreset(p.cmd, p.out);
+    chipBox.appendChild(c);
+  });
+
+  // Reset CLI output with initial boot log
+  const outBox = document.getElementById("cli-output-box");
+  outBox.innerHTML = `<div style="color:#94a3b8; margin-bottom:0.5rem;">[ChooSu Lab Virtual Cloud] Connected to <strong>${osKey.toUpperCase()}</strong> X11(:99) + PTY session.</div>`;
+  executePreset(node.presets[0].cmd, node.presets[0].out);
+  executePreset(node.presets[1].cmd, node.presets[1].out);
+
+  updateViewport();
+}
+
+function selectScenario(idx) {
+  currentScenarioIdx = idx;
+  const btns = document.getElementById("scenario-selector").querySelectorAll("button");
+  btns.forEach((b, i) => b.classList.toggle("active", i === idx));
+  updateViewport();
+}
+
+function setStep(step) {
+  currentStep = step;
+  [1, 2, 3].forEach(s => {
+    document.getElementById("btn-step-" + s).classList.toggle("active", s === step);
+  });
+  updateViewport();
+}
+
+function updateViewport() {
+  const sc = OS_NODES[currentOS].scenarios[currentScenarioIdx];
+  document.getElementById("vm-live-screen").src = sc.imgs[currentStep - 1];
+  document.getElementById("vm-scenario-desc").textContent = `[Step ${currentStep}/3] ${sc.desc}`;
+}
+
+function executePreset(cmd, out) {
+  const outBox = document.getElementById("cli-output-box");
+  const prompt = OS_NODES[currentOS].prompt;
+  const block = document.createElement("div");
+  block.style.marginBottom = "0.75rem";
+  block.innerHTML = `<div><span style="color:#34d399; font-weight:700;">${prompt}</span> <span style="color:#f8fafc; font-weight:700;">${cmd}</span></div><pre style="margin:0.25rem 0 0; color:#cbd5e1; white-space:pre-wrap; font-family:inherit;">${out}</pre>`;
+  outBox.appendChild(block);
+  outBox.scrollTop = outBox.scrollHeight;
+}
+
+function runCliCommand() {
+  const inp = document.getElementById("cli-cmd-input");
+  const cmd = inp.value.trim();
+  if (!cmd) return;
+  inp.value = "";
+  const node = OS_NODES[currentOS];
+  const matched = node.presets.find(p => p.cmd.toLowerCase().includes(cmd.toLowerCase()));
+  if (matched) {
+    executePreset(cmd, matched.out);
+  } else {
+    executePreset(cmd, `[${currentOS} kernel exec] Command '${cmd}' executed (Exit Code: 0)\nTimestamp: ${new Date().toISOString()} | X11 Display: :99 (1280x800x24)`);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  selectOSNode("win11pro");
+});
+</script>

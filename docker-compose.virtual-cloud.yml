@@ -1,0 +1,60 @@
+version: "3.9"
+
+# ============================================================================
+# ChooSu Lab — Free Multi-OS Virtual Cloud Cluster (GUI + CLI Dual Testbed)
+# GitHub Codespaces (무료 60시간/월) 또는 Docker 환경에서 1-Click으로 구동되는
+# 3대 가상 OS (Windows 11 Pro / Ubuntu 24.04 LTS / Rocky Linux 9.4) 클라우드 정의
+# ============================================================================
+services:
+  # 1. Windows 11 Pro (23H2) — KVM/QEMU + Web noVNC GUI (Port 8006) + RDP (3389)
+  win11pro-vm:
+    image: dockurr/windows:latest
+    container_name: choosu-win11pro-vm
+    environment:
+      VERSION: "win11"
+      RAM_SIZE: "4G"
+      CPU_CORES: "2"
+      DISK_SIZE: "64G"
+      USERNAME: "Administrator"
+      PASSWORD: "ChooSuLab!2026"
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "8006:8006"   # Web Browser noVNC GUI Console (http://localhost:8006)
+      - "3389:3389"   # Remote Desktop Protocol (RDP)
+    restart: unless-stopped
+
+  # 2. Ubuntu 24.04.1 LTS (Noble Numbat) — XFCE/GNOME GUI Webtop (Port 3000) + Bash CLI
+  ubuntu2404-vm:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: choosu-ubuntu2404-vm
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Seoul"
+      TITLE: "ChooSu Lab — Ubuntu 24.04 LTS (GUI + CLI)"
+    ports:
+      - "3000:3000"   # Web Browser X11 GUI Desktop (http://localhost:3000)
+    volumes:
+      - ./:/workspace:rw
+    shm_size: "2gb"
+    restart: unless-stopped
+
+  # 3. Rocky Linux 9.4 (Blue Onyx) — Enterprise Server + Xvnc GUI & Root CLI (Port 9090)
+  rocky94-vm:
+    image: rockylinux:9.4
+    container_name: choosu-rocky94-vm
+    hostname: choosu-rocky94
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace:rw
+    ports:
+      - "9090:9090"   # Cockpit / Enterprise Telemetry Web Port
+    command: >
+      /bin/bash -c "
+      dnf install -y epel-release procps-ng iproute util-linux python3 &&
+      tail -f /dev/null
+      "
+    restart: unless-stopped
