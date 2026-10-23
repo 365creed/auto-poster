@@ -1,31 +1,31 @@
 {
-  "captured_at": "2026-10-23 15:28:47 KST",
-  "scene_type": "system_monitor",
-  "os_profile": "ubuntu2404",
-  "lesson_title": "[ChooSu Lab Technical Report #10] 시분할 다중처리(Time-Sharing Multitasking)의 문맥 교환(Context Switch) 오버헤드와 선점형 CPU 스케줄러(CFS · MLFQ)의 공정성 수리 모델",
+  "captured_at": "2026-10-23 19:44:28 KST",
+  "scene_type": "file_explorer",
+  "os_profile": "win11pro",
+  "lesson_title": "[ChooSu Lab Technical Report #11] 프로세스 간 통신(IPC) 기반 클립보드(Ctrl+C / Ctrl+V)의 지연 렌더링(Delayed Rendering) 아키텍처와 유니코드(UTF-8) 바이트 직렬화 연구",
   "x11_display_server": "TigerVNC Xvnc :99 / Xvfb 1280x800x24 + GTK3 Gdk Pixbuf Capture",
   "kernel_uname": "Linux 6.17.0-1022-azure x86_64",
   "screenshots": [
     {
       "step": 1,
-      "file": "assets/images/2026-10-23/os_step1_20261023_152821.png",
-      "url": "/choosu-lab/assets/images/2026-10-23/os_step1_20261023_152821.png",
+      "file": "assets/images/2026-10-23/os_step1_20261023_194402.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step1_20261023_194402.png",
       "resolution": "1280x800",
-      "size_bytes": 121873
+      "size_bytes": 134851
     },
     {
       "step": 2,
-      "file": "assets/images/2026-10-23/os_step2_20261023_152821.png",
-      "url": "/choosu-lab/assets/images/2026-10-23/os_step2_20261023_152821.png",
+      "file": "assets/images/2026-10-23/os_step2_20261023_194402.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step2_20261023_194402.png",
       "resolution": "1280x800",
-      "size_bytes": 126696
+      "size_bytes": 134859
     },
     {
       "step": 3,
-      "file": "assets/images/2026-10-23/os_step3_20261023_152821.png",
-      "url": "/choosu-lab/assets/images/2026-10-23/os_step3_20261023_152821.png",
+      "file": "assets/images/2026-10-23/os_step3_20261023_194402.png",
+      "url": "/choosu-lab/assets/images/2026-10-23/os_step3_20261023_194402.png",
       "resolution": "1280x800",
-      "size_bytes": 124021
+      "size_bytes": 135637
     }
   ]
 }
