@@ -1,31 +1,31 @@
 {
-  "captured_at": "2026-10-24 19:00:39 KST",
-  "scene_type": "pc_rename",
+  "captured_at": "2026-10-25 00:14:44 KST",
+  "scene_type": "system_monitor",
   "os_profile": "auto",
-  "lesson_title": "[ChooSu Lab Technical Report #14] 클로드 섀넌(Claude E. Shannon, 1948)의 정보 엔트로피(Information Entropy) 한계와 무손실 압축(Huffman · LZ77) 및 해밍 오류 정정 코드(ECC) 연구",
+  "lesson_title": "[ChooSu Lab Technical Report #15] 슈퍼스칼라(Superscalar) CPU의 비순차 실행(Out-of-Order Execution)과 분기 예측(Branch Prediction) 및 캐시 일관성(MESI 프로토콜) 수리 분석",
   "x11_display_server": "TigerVNC Xvnc :99 / Xvfb 1280x800x24 + GTK3 Gdk Pixbuf Capture",
   "kernel_uname": "Linux 6.17.0-1022-azure x86_64",
   "screenshots": [
     {
       "step": 1,
-      "file": "assets/images/2026-10-24/os_step1_20261024_190013.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step1_20261024_190013.png",
+      "file": "assets/images/2026-10-25/os_step1_20261025_001418.png",
+      "url": "/choosu-lab/assets/images/2026-10-25/os_step1_20261025_001418.png",
       "resolution": "1280x800",
-      "size_bytes": 135161
+      "size_bytes": 122214
     },
     {
       "step": 2,
-      "file": "assets/images/2026-10-24/os_step2_20261024_190013.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step2_20261024_190013.png",
+      "file": "assets/images/2026-10-25/os_step2_20261025_001418.png",
+      "url": "/choosu-lab/assets/images/2026-10-25/os_step2_20261025_001418.png",
       "resolution": "1280x800",
-      "size_bytes": 133986
+      "size_bytes": 127767
     },
     {
       "step": 3,
-      "file": "assets/images/2026-10-24/os_step3_20261024_190013.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step3_20261024_190013.png",
+      "file": "assets/images/2026-10-25/os_step3_20261025_001418.png",
+      "url": "/choosu-lab/assets/images/2026-10-25/os_step3_20261025_001418.png",
       "resolution": "1280x800",
-      "size_bytes": 138578
+      "size_bytes": 124528
     }
   ]
 }
