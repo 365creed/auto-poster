@@ -1,31 +1,31 @@
 {
-  "captured_at": "2026-10-24 12:02:30 KST",
-  "scene_type": "file_explorer",
+  "captured_at": "2026-10-24 19:00:39 KST",
+  "scene_type": "pc_rename",
   "os_profile": "auto",
-  "lesson_title": "[ChooSu Lab Technical Report #13] 다중 스레드 환경의 상호배제(Mutual Exclusion) 원리와 다익스트라(Dijkstra, 1965) 세마포어 및 커널 교착상태(Deadlock) 회피 알고리즘",
+  "lesson_title": "[ChooSu Lab Technical Report #14] 클로드 섀넌(Claude E. Shannon, 1948)의 정보 엔트로피(Information Entropy) 한계와 무손실 압축(Huffman · LZ77) 및 해밍 오류 정정 코드(ECC) 연구",
   "x11_display_server": "TigerVNC Xvnc :99 / Xvfb 1280x800x24 + GTK3 Gdk Pixbuf Capture",
   "kernel_uname": "Linux 6.17.0-1022-azure x86_64",
   "screenshots": [
     {
       "step": 1,
-      "file": "assets/images/2026-10-24/os_step1_20261024_120204.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step1_20261024_120204.png",
+      "file": "assets/images/2026-10-24/os_step1_20261024_190013.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step1_20261024_190013.png",
       "resolution": "1280x800",
-      "size_bytes": 133923
+      "size_bytes": 135161
     },
     {
       "step": 2,
-      "file": "assets/images/2026-10-24/os_step2_20261024_120204.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step2_20261024_120204.png",
+      "file": "assets/images/2026-10-24/os_step2_20261024_190013.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step2_20261024_190013.png",
       "resolution": "1280x800",
-      "size_bytes": 133887
+      "size_bytes": 133986
     },
     {
       "step": 3,
-      "file": "assets/images/2026-10-24/os_step3_20261024_120204.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step3_20261024_120204.png",
+      "file": "assets/images/2026-10-24/os_step3_20261024_190013.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step3_20261024_190013.png",
       "resolution": "1280x800",
-      "size_bytes": 134729
+      "size_bytes": 138578
     }
   ]
 }
