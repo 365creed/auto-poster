@@ -1,31 +1,31 @@
 {
-  "captured_at": "2026-10-24 01:28:00 KST",
-  "scene_type": "pc_rename",
-  "os_profile": "rocky94",
-  "lesson_title": "[ChooSu Lab Technical Report #12] 웹 브라우저 주소창 입력 후 100밀리초 동안 일어나는 일: 서프·칸(Cerf & Kahn, 1974)의 TCP 패킷 캡슐화와 계층형 DNS 및 TLS 핸드셰이크의 수리적 분석",
+  "captured_at": "2026-10-24 12:02:30 KST",
+  "scene_type": "file_explorer",
+  "os_profile": "auto",
+  "lesson_title": "[ChooSu Lab Technical Report #13] 다중 스레드 환경의 상호배제(Mutual Exclusion) 원리와 다익스트라(Dijkstra, 1965) 세마포어 및 커널 교착상태(Deadlock) 회피 알고리즘",
   "x11_display_server": "TigerVNC Xvnc :99 / Xvfb 1280x800x24 + GTK3 Gdk Pixbuf Capture",
   "kernel_uname": "Linux 6.17.0-1022-azure x86_64",
   "screenshots": [
     {
       "step": 1,
-      "file": "assets/images/2026-10-24/os_step1_20261024_012734.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step1_20261024_012734.png",
+      "file": "assets/images/2026-10-24/os_step1_20261024_120204.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step1_20261024_120204.png",
       "resolution": "1280x800",
-      "size_bytes": 127307
+      "size_bytes": 133923
     },
     {
       "step": 2,
-      "file": "assets/images/2026-10-24/os_step2_20261024_012734.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step2_20261024_012734.png",
+      "file": "assets/images/2026-10-24/os_step2_20261024_120204.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step2_20261024_120204.png",
       "resolution": "1280x800",
-      "size_bytes": 125895
+      "size_bytes": 133887
     },
     {
       "step": 3,
-      "file": "assets/images/2026-10-24/os_step3_20261024_012734.png",
-      "url": "/choosu-lab/assets/images/2026-10-24/os_step3_20261024_012734.png",
+      "file": "assets/images/2026-10-24/os_step3_20261024_120204.png",
+      "url": "/choosu-lab/assets/images/2026-10-24/os_step3_20261024_120204.png",
       "resolution": "1280x800",
-      "size_bytes": 130667
+      "size_bytes": 134729
     }
   ]
 }
